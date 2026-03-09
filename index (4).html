@@ -1,0 +1,1768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMP Agency — Client Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #08090b;
+  --bg2: #0d0f13;
+  --surface: #111318;
+  --surface2: #161920;
+  --surface3: #1c2028;
+  --border: #1f2430;
+  --border2: #262d3a;
+  --text: #eceef2;
+  --text2: #8d95a8;
+  --text3: #4a5266;
+  --accent: #4f8ef7;
+  --accent-glow: rgba(79,142,247,0.15);
+  --green: #3ecf8e;
+  --green-glow: rgba(62,207,142,0.12);
+  --yellow: #f5c842;
+  --red: #f76e6e;
+  --meta: #1877f2;
+  --google: #34a853;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Geist', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 14px;
+  overflow-x: hidden;
+}
+
+/* ── GRAIN OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.4;
+}
+
+/* ════════════════════════════════════════
+   LOGIN SCREEN
+════════════════════════════════════════ */
+#login-screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  z-index: 1000;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+#login-screen.exit {
+  opacity: 0;
+  transform: scale(0.98);
+  pointer-events: none;
+}
+
+.login-wrap {
+  width: 100%;
+  max-width: 420px;
+  padding: 20px;
+  animation: fadeUp 0.6s ease both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.login-logo {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.login-logo-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: var(--accent);
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.5px;
+  margin-bottom: 14px;
+  box-shadow: 0 0 40px rgba(79,142,247,0.35);
+}
+
+.login-logo-name {
+  font-family: 'Instrument Serif', serif;
+  font-size: 28px;
+  color: var(--text);
+  letter-spacing: -0.3px;
+}
+
+.login-logo-sub {
+  font-size: 12px;
+  color: var(--text3);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.login-card {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.4);
+}
+
+.login-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--text);
+}
+
+.login-card-sub {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 28px;
+  line-height: 1.5;
+}
+
+.field-group { margin-bottom: 16px; }
+
+.field-label {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--text2);
+  margin-bottom: 7px;
+  letter-spacing: 0.03em;
+}
+
+.field-select,
+.field-input {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  padding: 11px 14px;
+  color: var(--text);
+  font-family: 'Geist', sans-serif;
+  font-size: 13.5px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.field-select { 
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234a5266' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+.field-select option { background: #1c2028; }
+
+.field-input:focus,
+.field-select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(79,142,247,0.1);
+}
+
+.field-input::placeholder { color: var(--text3); }
+
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Geist', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: opacity 0.15s, transform 0.1s, box-shadow 0.15s;
+  box-shadow: 0 4px 20px rgba(79,142,247,0.3);
+}
+
+.login-btn:hover { opacity: 0.9; box-shadow: 0 6px 28px rgba(79,142,247,0.4); }
+.login-btn:active { transform: scale(0.99); }
+
+.login-error {
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: rgba(247,110,110,0.08);
+  border: 1px solid rgba(247,110,110,0.2);
+  border-radius: 8px;
+  font-size: 12.5px;
+  color: var(--red);
+  display: none;
+}
+
+.login-error.show { display: block; }
+
+/* ════════════════════════════════════════
+   APP SHELL
+════════════════════════════════════════ */
+#app {
+  display: none;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+#app.visible { display: flex; }
+
+/* ── NAV ── */
+#nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(8,9,11,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-logo-mark {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.nav-logo-name {
+  font-family: 'Instrument Serif', serif;
+  font-size: 18px;
+  color: var(--text);
+}
+
+.nav-logo-divider {
+  width: 1px;
+  height: 16px;
+  background: var(--border2);
+  margin: 0 2px;
+}
+
+.nav-practice-name {
+  font-size: 13px;
+  color: var(--text2);
+  font-weight: 500;
+}
+
+.nav-right { display: flex; align-items: center; gap: 10px; }
+
+.nav-tabs { display: flex; gap: 2px; }
+
+.nav-tab {
+  padding: 6px 14px;
+  border-radius: 7px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--text3);
+  cursor: pointer;
+  transition: all 0.15s;
+  border: 1px solid transparent;
+}
+
+.nav-tab:hover { color: var(--text2); background: var(--surface); }
+.nav-tab.active { background: var(--surface2); border-color: var(--border2); color: var(--text); }
+
+.nav-logout {
+  padding: 6px 14px;
+  border-radius: 7px;
+  font-size: 12px;
+  color: var(--text3);
+  cursor: pointer;
+  border: 1px solid var(--border);
+  transition: all 0.15s;
+  font-weight: 500;
+}
+.nav-logout:hover { color: var(--text2); border-color: var(--border2); }
+
+/* ── PAGE ── */
+#page { flex: 1; }
+
+.tab-content { display: none; padding: 36px 32px; }
+.tab-content.active { display: block; }
+
+/* ════════════════════════════════════════
+   HERO SECTION
+════════════════════════════════════════ */
+.hero {
+  padding: 52px 32px 40px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -80px; right: -80px;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(79,142,247,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.hero-eyebrow::before {
+  content: '';
+  width: 18px; height: 1.5px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+.hero-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(32px, 4vw, 48px);
+  line-height: 1.1;
+  color: var(--text);
+  margin-bottom: 14px;
+  max-width: 600px;
+}
+
+.hero-title em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.hero-sub {
+  font-size: 14px;
+  color: var(--text2);
+  line-height: 1.7;
+  max-width: 480px;
+  margin-bottom: 32px;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.hero-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.hero-stat-num {
+  font-family: 'Geist Mono', monospace;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.hero-stat-label {
+  font-size: 11px;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.hero-stat-divider {
+  width: 1px;
+  background: var(--border2);
+  align-self: stretch;
+  margin: 4px 0;
+}
+
+/* ════════════════════════════════════════
+   STAT CARDS
+════════════════════════════════════════ */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.stat-card:hover { border-color: var(--border2); }
+
+.stat-card-accent {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  border-radius: 1px 1px 0 0;
+}
+
+.stat-card-icon {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px;
+  margin-bottom: 14px;
+}
+
+.stat-card-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 6px;
+}
+
+.stat-card-value {
+  font-family: 'Geist Mono', monospace;
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+  line-height: 1;
+}
+
+.stat-card-sub {
+  font-size: 11.5px;
+  color: var(--text3);
+}
+
+/* ════════════════════════════════════════
+   CHARTS
+════════════════════════════════════════ */
+.chart-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 22px;
+  margin-bottom: 16px;
+}
+
+.chart-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.chart-card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+
+.chart-card-sub {
+  font-size: 12px;
+  color: var(--text3);
+}
+
+.chart-tag {
+  font-size: 10.5px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  background: var(--surface3);
+  color: var(--text3);
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.charts-2col {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+/* ════════════════════════════════════════
+   BUDGET TABLE
+════════════════════════════════════════ */
+.table-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.table-card-header {
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.table-card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.table-scroll { overflow-x: auto; }
+
+table.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table th {
+  padding: 10px 16px;
+  text-align: right;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text3);
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.data-table th:first-child { text-align: left; }
+
+.data-table td {
+  padding: 10px 16px;
+  text-align: right;
+  border-bottom: 1px solid var(--border);
+  font-family: 'Geist Mono', monospace;
+  font-size: 12px;
+  color: var(--text2);
+  white-space: nowrap;
+}
+
+.data-table td:first-child { text-align: left; font-family: 'Geist', sans-serif; color: var(--text); font-size: 13px; }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: var(--surface2); }
+.data-table td.zero { color: var(--text3); }
+.data-table td.total { color: var(--accent); font-weight: 600; }
+.data-table td.up { color: var(--green); }
+.data-table td.down { color: var(--red); }
+
+/* ════════════════════════════════════════
+   AD CHANNELS
+════════════════════════════════════════ */
+.channels-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.channel-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 22px;
+  transition: border-color 0.2s;
+}
+
+.channel-card:hover { border-color: var(--border2); }
+
+.channel-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.ch-icon {
+  width: 36px; height: 36px;
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 700;
+  flex-shrink: 0;
+}
+
+.ch-icon.google { background: rgba(52,168,83,0.12); color: var(--google); }
+.ch-icon.meta   { background: rgba(24,119,242,0.12); color: var(--meta); }
+
+.ch-name { font-size: 15px; font-weight: 600; color: var(--text); flex: 1; }
+
+.ch-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 500;
+}
+
+.status-pip {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+}
+
+.status-pip.live    { background: var(--green); box-shadow: 0 0 6px var(--green); animation: blink 2s infinite; }
+.status-pip.pending { background: var(--yellow); }
+.status-pip.none    { background: var(--text3); }
+
+@keyframes blink {
+  0%,100% { opacity:1; }
+  50%      { opacity:0.35; }
+}
+
+.ch-metric-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.ch-metric {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.ch-metric-label {
+  font-size: 10.5px;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 5px;
+}
+
+.ch-metric-value {
+  font-family: 'Geist Mono', monospace;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.ch-metric-sub {
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: 2px;
+}
+
+.ch-connect-box {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 14px;
+}
+
+.ch-connect-label {
+  font-size: 11px;
+  color: var(--text3);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.ch-connect-row {
+  display: flex;
+  gap: 8px;
+}
+
+.ch-connect-input {
+  flex: 1;
+  background: var(--surface3);
+  border: 1px solid var(--border2);
+  border-radius: 7px;
+  padding: 8px 11px;
+  color: var(--text);
+  font-family: 'Geist Mono', monospace;
+  font-size: 12px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.ch-connect-input:focus { border-color: var(--accent); }
+.ch-connect-input::placeholder { color: var(--text3); }
+
+.ch-save-btn {
+  padding: 8px 16px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  font-family: 'Geist', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+}
+
+.ch-save-btn:hover { opacity: 0.85; }
+.ch-save-btn.saved { background: var(--green); }
+
+/* ════════════════════════════════════════
+   AGREEMENTS
+════════════════════════════════════════ */
+.agreement-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.agreement-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.agreement-card-header {
+  padding: 16px 20px;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.agreement-card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.agreement-card-body { padding: 6px 0; }
+
+.service-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 20px;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.12s;
+}
+
+.service-row:last-child { border-bottom: none; }
+.service-row:hover { background: var(--surface2); }
+
+.service-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.service-name {
+  font-size: 13px;
+  color: var(--text2);
+  flex: 1;
+}
+
+.service-by {
+  font-size: 11.5px;
+  color: var(--text3);
+  font-family: 'Geist Mono', monospace;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.badge.active   { background: rgba(62,207,142,0.1);  color: var(--green); border: 1px solid rgba(62,207,142,0.2); }
+.badge.pending  { background: rgba(245,200,66,0.1);  color: var(--yellow); border: 1px solid rgba(245,200,66,0.2); }
+.badge.inactive { background: var(--surface3); color: var(--text3); border: 1px solid var(--border); }
+
+/* ════════════════════════════════════════
+   NOTICE / INFO BOXES
+════════════════════════════════════════ */
+.info-box {
+  padding: 14px 18px;
+  border-radius: 10px;
+  font-size: 12.5px;
+  line-height: 1.6;
+  margin-bottom: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.info-box.blue {
+  background: rgba(79,142,247,0.06);
+  border: 1px solid rgba(79,142,247,0.18);
+  color: var(--text2);
+}
+
+.info-box.green {
+  background: rgba(62,207,142,0.06);
+  border: 1px solid rgba(62,207,142,0.18);
+  color: var(--text2);
+}
+
+.info-box-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+/* ════════════════════════════════════════
+   CONTACT CARD
+════════════════════════════════════════ */
+.contact-strip {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 22px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 16px;
+}
+
+.contact-avatar {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 700; color: #fff;
+  flex-shrink: 0;
+}
+
+.contact-info { flex: 1; }
+.contact-name { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+.contact-role { font-size: 12px; color: var(--text3); }
+
+.contact-actions { display: flex; gap: 8px; }
+
+.contact-btn {
+  padding: 7px 16px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--border2);
+  background: var(--surface2);
+  color: var(--text2);
+  font-family: 'Geist', sans-serif;
+  text-decoration: none;
+  transition: all 0.15s;
+}
+
+.contact-btn:hover { background: var(--surface3); color: var(--text); }
+.contact-btn.primary { background: var(--accent); color: #fff; border-color: transparent; box-shadow: 0 2px 12px rgba(79,142,247,0.25); }
+.contact-btn.primary:hover { opacity: 0.88; }
+
+/* ════════════════════════════════════════
+   PROGRESS BAR (budget pacing)
+════════════════════════════════════════ */
+.pacing-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 22px;
+  margin-bottom: 16px;
+}
+
+.pacing-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.pacing-row:last-child { margin-bottom: 0; }
+
+.pacing-label { font-size: 12.5px; color: var(--text2); width: 90px; flex-shrink: 0; }
+
+.pacing-bar-bg {
+  flex: 1;
+  height: 6px;
+  background: var(--surface3);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.pacing-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1s cubic-bezier(0.4,0,0.2,1);
+}
+
+.pacing-pct {
+  font-family: 'Geist Mono', monospace;
+  font-size: 12px;
+  color: var(--text3);
+  width: 40px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ════════════════════════════════════════
+   FOOTER
+════════════════════════════════════════ */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 20px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text3);
+  font-size: 12px;
+}
+
+/* ════════════════════════════════════════
+   ANIMATIONS
+════════════════════════════════════════ */
+.reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  animation: reveal 0.5s ease forwards;
+}
+
+@keyframes reveal {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.reveal-1 { animation-delay: 0.05s; }
+.reveal-2 { animation-delay: 0.12s; }
+.reveal-3 { animation-delay: 0.19s; }
+.reveal-4 { animation-delay: 0.26s; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+
+@media (max-width: 768px) {
+  .charts-2col, .channels-grid, .agreement-grid { grid-template-columns: 1fr; }
+  .hero-stats { gap: 18px; }
+  .nav-tabs { display: none; }
+  #nav { padding: 0 16px; }
+  .tab-content { padding: 20px 16px; }
+  .hero { padding: 32px 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════ LOGIN SCREEN ════ -->
+<div id="login-screen">
+  <div class="login-wrap">
+    <div class="login-logo">
+      <div>
+        <div class="login-logo-mark">A</div>
+      </div>
+      <div class="login-logo-name">AMP Agency</div>
+      <div class="login-logo-sub">Client Portal · 2026</div>
+    </div>
+    <div class="login-card">
+      <div class="login-card-title">Welcome back</div>
+      <div class="login-card-sub">Select your practice and enter the portal password to access your marketing dashboard.</div>
+
+      <div class="field-group">
+        <div class="field-label">Your Practice</div>
+        <select class="field-select" id="practice-select">
+          <option value="">— Select a practice —</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">Portal Password</div>
+        <input class="field-input" type="password" id="password-input" placeholder="Enter password" onkeydown="if(event.key==='Enter') doLogin()">
+      </div>
+
+      <button class="login-btn" onclick="doLogin()">Access Dashboard →</button>
+      <div class="login-error" id="login-error">Incorrect password. Please try again.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ APP ════ -->
+<div id="app">
+
+  <!-- NAV -->
+  <nav id="nav">
+    <div class="nav-logo">
+      <div class="nav-logo-mark">A</div>
+      <div class="nav-logo-name">AMP Agency</div>
+      <div class="nav-logo-divider"></div>
+      <div class="nav-practice-name" id="nav-practice-name"></div>
+    </div>
+    <div class="nav-right">
+      <div class="nav-tabs">
+        <div class="nav-tab active" onclick="showTab('overview', this)">Overview</div>
+        <div class="nav-tab" onclick="showTab('budget', this)">Budget</div>
+        <div class="nav-tab" onclick="showTab('ads', this)">Ad Spend</div>
+        <div class="nav-tab" onclick="showTab('agreements', this)">Agreement</div>
+      </div>
+      <div class="nav-logout" onclick="doLogout()">Log out</div>
+    </div>
+  </nav>
+
+  <!-- PAGE -->
+  <div id="page">
+
+    <!-- ── OVERVIEW TAB ── -->
+    <div class="tab-content active" id="tab-overview">
+      <div class="hero" id="hero-section">
+        <div class="hero-eyebrow">Marketing Performance</div>
+        <div class="hero-title">Your 2026 <em>advertising</em><br>at a glance.</div>
+        <div class="hero-sub" id="hero-sub">Budget tracking, ad performance, and agency services — all in one place.</div>
+        <div class="hero-stats" id="hero-stats"></div>
+      </div>
+
+      <div style="padding: 32px 32px 0;" class="reveal reveal-1">
+        <div class="cards-grid" id="overview-cards"></div>
+      </div>
+
+      <div style="padding: 0 32px;" class="reveal reveal-2">
+        <div class="charts-2col">
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div>
+                <div class="chart-card-title">Monthly Budget — 2026</div>
+                <div class="chart-card-sub">Budgeted spend by month</div>
+              </div>
+              <div class="chart-tag">Full Year</div>
+            </div>
+            <canvas id="monthly-bar-chart" height="85"></canvas>
+          </div>
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div>
+                <div class="chart-card-title">Spend Curve</div>
+                <div class="chart-card-sub">Budget trajectory</div>
+              </div>
+            </div>
+            <canvas id="monthly-line-chart" height="85"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding: 0 32px 32px;" class="reveal reveal-3">
+        <div class="pacing-card" id="pacing-card">
+          <div class="chart-card-header" style="margin-bottom:18px;padding:0">
+            <div>
+              <div class="chart-card-title">YTD Budget Pacing</div>
+              <div class="chart-card-sub">Jan – current month vs. annual total</div>
+            </div>
+          </div>
+          <div id="pacing-rows"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── BUDGET TAB ── -->
+    <div class="tab-content" id="tab-budget">
+      <div class="table-card reveal">
+        <div class="table-card-header">
+          <div class="table-card-title">Monthly Budget Breakdown</div>
+          <div class="chart-tag" id="budget-table-tag"></div>
+        </div>
+        <div class="table-scroll">
+          <table class="data-table" id="budget-detail-table">
+            <thead>
+              <tr>
+                <th>Month</th>
+                <th>Budget</th>
+                <th>vs. Monthly Avg</th>
+                <th>% of Annual</th>
+                <th>Cumulative</th>
+              </tr>
+            </thead>
+            <tbody id="budget-detail-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style="margin-top:16px" class="reveal reveal-2">
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div>
+              <div class="chart-card-title">Budget Distribution</div>
+              <div class="chart-card-sub">Monthly vs. annual average — green = above avg, red = below</div>
+            </div>
+          </div>
+          <canvas id="budget-dist-chart" height="75"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ADS TAB ── -->
+    <div class="tab-content" id="tab-ads">
+      <div class="info-box blue reveal">
+        <div class="info-box-icon">📡</div>
+        <div>Live ad spend data pulls directly from your Google Ads and Meta Ads accounts via Looker Studio connectors. Enter your account IDs below to activate. Data refreshes every 6–12 hours.</div>
+      </div>
+
+      <div class="channels-grid reveal reveal-1" id="channels-grid"></div>
+
+      <div class="chart-card reveal reveal-2">
+        <div class="chart-card-header">
+          <div>
+            <div class="chart-card-title">Budget vs. Actual Spend</div>
+            <div class="chart-card-sub">Once ad accounts are connected, this chart shows live pacing data month over month.</div>
+          </div>
+          <div class="chart-tag">Live when connected</div>
+        </div>
+        <canvas id="spend-vs-budget-chart" height="80"></canvas>
+      </div>
+    </div>
+
+    <!-- ── AGREEMENTS TAB ── -->
+    <div class="tab-content" id="tab-agreements">
+      <div class="contact-strip reveal">
+        <div class="contact-avatar">A</div>
+        <div class="contact-info">
+          <div class="contact-name">AMP Agency Team</div>
+          <div class="contact-role">Your dedicated account management team · questions@ampagency.com</div>
+        </div>
+        <div class="contact-actions">
+          <a href="mailto:questions@ampagency.com" class="contact-btn primary">Email Us</a>
+        </div>
+      </div>
+
+      <div class="agreement-grid reveal reveal-1" id="agreement-grid"></div>
+
+      <div class="info-box green reveal reveal-2">
+        <div class="info-box-icon">✓</div>
+        <div>All services listed above are actively managed by AMP Agency on your behalf. Agency management fees are billed monthly per your signed agreement. Contact your account manager with any questions about scope or billing.</div>
+      </div>
+    </div>
+
+  </div><!-- /page -->
+
+  <footer>
+    <div>© 2026 AMP Agency · Client Portal</div>
+    <div>Data refreshes daily · <span style="color:var(--accent)">Support: questions@ampagency.com</span></div>
+  </footer>
+
+</div><!-- /app -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script>
+// ═══════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════
+const PORTAL_PASSWORD = 'AMP2026';
+
+const MONTHS     = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MONTHS_F   = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const CUR_MONTH  = new Date().getMonth(); // 0-indexed
+
+const PRACTICES = [
+  {name:"22 Spa",                              annual:314576,  monthly:[0,26601,30240,32426,29868,27031,27504,26589,28263,30290,28093,27671]},
+  {name:"Aesthetic Clinique - SRB",            annual:131804,  monthly:[0,11147,12665,13565,12492,11345,11539,11153,11842,12686,11762,11608]},
+  {name:"AMP CORP",                            annual:305965,  monthly:[0,27815,27815,27815,27815,27815,27815,27815,27815,27815,27815,27815]},
+  {name:"Avelure - Buffalo",                   annual:113713,  monthly:[0,7524,7524,8040,8608,9234,9926,10690,11535,12470,13506,14656]},
+  {name:"Avelure - Creve Coeur",               annual:68578,   monthly:[0,3204,3204,3567,4016,4573,5267,6134,7223,8591,10313,12486]},
+  {name:"Avelure - Gainesville",               annual:0,       monthly:[0,0,0,0,0,0,0,0,0,0,0,0]},
+  {name:"Avelure - Grand Rapids",              annual:134404,  monthly:[0,8870,8870,9494,10179,10930,11754,12660,13656,14751,15956,17284]},
+  {name:"Avelure - Greenwood",                 annual:99159,   monthly:[0,3441,3441,4076,4875,5882,7153,8760,10792,13364,16623,20752]},
+  {name:"Avelure - Indy",                      annual:112842,  monthly:[0,5029,5029,5680,6478,7461,8673,10173,12030,14334,17197,20758]},
+  {name:"Avelure - Novi",                      annual:106951,  monthly:[0,5632,5632,6187,6851,7650,8612,9776,11187,12901,14989,17534]},
+  {name:"Avelure - O'Fallon",                  annual:75318,   monthly:[0,2814,2814,3255,3813,4524,5431,6591,8078,9984,12433,15581]},
+  {name:"Avelure - Ocala",                     annual:92103,   monthly:[0,4889,4889,5369,5940,6624,7446,8436,9632,11079,12834,14965]},
+  {name:"Avelure - Rochester",                 annual:106081,  monthly:[0,7166,7166,7624,8127,8680,9289,9960,10701,11519,12424,13425]},
+  {name:"Avelure - Rochester Hills",           annual:97313,   monthly:[0,5506,5506,5980,6540,7204,7996,8941,10074,11436,13076,15054]},
+  {name:"Avelure - Sunset Hills",              annual:77786,   monthly:[0,4858,4858,5216,5624,6090,6626,7242,7952,8773,9723,10824]},
+  {name:"Avelure - Waterford",                 annual:84650,   monthly:[0,4015,4015,4453,4994,5666,6507,7560,8885,10555,12665,15335]},
+  {name:"Avelure - Westport",                  annual:0,       monthly:[0,0,0,0,0,0,0,0,0,0,0,0]},
+  {name:"Avelure - Zona Rosa",                 annual:165266,  monthly:[0,7641,7641,8590,9744,11152,12875,14988,17584,20777,24711,29563]},
+  {name:"B230 - Boiling Springs",              annual:85443,   monthly:[0,7226,8212,8800,8105,7348,7476,7226,7677,8225,7627,7521]},
+  {name:"B230 - Hwy 14",                       annual:102244,  monthly:[0,8647,9826,10527,9695,8796,8948,8649,9186,9842,9126,9002]},
+  {name:"B230 - McBee",                        annual:92015,   monthly:[0,7782,8843,9474,8726,7916,8052,7783,8267,8858,8213,8101]},
+  {name:"B230 - Simpsonville",                 annual:85737,   monthly:[0,7251,8240,8831,8134,7373,7501,7250,7703,8254,7654,7546]},
+  {name:"Blush - Avon",                        annual:59526,   monthly:[0,5034,5721,6132,5648,5118,5207,5034,5348,5731,5314,5239]},
+  {name:"Blush - East Longmeadow",             annual:71387,   monthly:[0,6036,6863,7360,6780,6133,6240,6033,6414,6874,6376,6278]},
+  {name:"Blush - Enfield",                     annual:98849,   monthly:[0,8359,9501,10182,9378,8500,8647,8359,8881,9517,8825,8700]},
+  {name:"Blush - Glastonbury",                 annual:71359,   monthly:[0,6035,6859,7351,6770,6136,6242,6034,6411,6870,6371,6280]},
+  {name:"Blush - Orange",                      annual:78402,   monthly:[0,6630,7537,8083,7446,6735,6854,6626,7044,7550,7002,6895]},
+  {name:"Curate - Chattanooga",                annual:64523,   monthly:[0,5456,6203,6652,6128,5543,5640,5453,5797,6213,5763,5675]},
+  {name:"Curate - Knoxville",                  annual:135580,  monthly:[0,8256,8256,8927,9690,10557,11546,12676,13969,15451,17150,19102]},
+  {name:"Curate - Murfreesboro",               annual:0,       monthly:[0,0,0,0,0,0,0,0,0,0,0,0]},
+  {name:"Curate - Nashville",                  annual:135604,  monthly:[0,6503,6503,7192,8036,9081,10386,12032,14123,16799,20245,24704]},
+  {name:"Curate - Ooltewah",                   annual:113888,  monthly:[0,9631,10946,11730,10804,9794,9964,9632,10232,10964,10167,10024]},
+  {name:"DA - El Dorado Hills",                annual:137267,  monthly:[0,6749,8335,12916,20881,6925,7604,21880,14227,10466,12714,14570]},
+  {name:"DA - Elk Grove",                      annual:137284,  monthly:[0,6434,12296,14909,21202,6892,6483,21548,12063,10428,11664,13365]},
+  {name:"DA - Folsom",                         annual:127224,  monthly:[0,6734,8922,14257,15249,6173,6351,17164,14219,12129,13448,12578]},
+  {name:"DA - Napa",                           annual:84191,   monthly:[0,7160,3215,4018,14447,7161,7462,7333,8239,8383,9095,7678]},
+  {name:"DA - Online Store",                   annual:685,     monthly:[0,685,0,0,0,0,0,0,0,0,0,0]},
+  {name:"DA - Roseville",                      annual:135049,  monthly:[0,6215,7415,14816,15636,5705,5814,23167,13994,12008,15954,14325]},
+  {name:"DA - Sacramento",                     annual:135236,  monthly:[0,7670,9083,17205,25982,4949,5120,18574,12935,9811,11697,12210]},
+  {name:"EsthetixMD",                          annual:254094,  monthly:[0,21491,24416,26148,24080,21872,22247,21502,22829,24456,22674,22379]},
+  {name:"Ever/Body - Bethesda Row",            annual:0,       monthly:[0,0,0,0,0,0,0,0,0,0,0,0]},
+  {name:"Ever/Body - Colleyville",             annual:59934,   monthly:[0,5068,5762,6179,5692,5149,5239,5065,5385,5771,5353,5271]},
+  {name:"Ever/Body - Flatiron",                annual:158603,  monthly:[0,13412,15245,16344,15054,13633,13870,13408,14250,15271,14162,13954]},
+  {name:"Ever/Body - Gaithersburg",            annual:111560,  monthly:[0,5280,5280,5893,6641,7559,8687,10078,11798,13927,16568,19849]},
+  {name:"Ever/Body - Hartford",                annual:131212,  monthly:[0,8939,8939,9485,10085,10749,11482,12294,13194,14194,15306,16545]},
+  {name:"Ever/Body - Logan Circle",            annual:92859,   monthly:[0,7852,8926,9569,8814,7982,8121,7850,8343,8941,8291,8170]},
+  {name:"Ever/Body - North Haven",             annual:71876,   monthly:[0,3613,3613,3983,4433,4983,5660,6494,7526,8805,10394,12372]},
+  {name:"Ever/Body - Stamford",                annual:0,       monthly:[0,0,0,0,0,0,0,0,0,0,0,0]},
+  {name:"Ever/Body - Williamsburg",            annual:84889,   monthly:[0,7179,8159,8747,8056,7298,7425,7177,7627,8173,7579,7469]},
+  {name:"Every/Body - South Windsor",          annual:110207,  monthly:[0,6328,6328,6854,7475,8211,9085,10129,11378,12878,14683,16858]},
+  {name:"Glo - Wilmington",                    annual:195484,  monthly:[0,16531,18790,20144,18555,16803,17096,16526,17563,18822,17455,17199]},
+  {name:"Glo - Winterville",                   annual:120793,  monthly:[0,10214,11612,12454,11472,10377,10559,10208,10853,11632,10789,10623]},
+  {name:"H-MD",                                annual:148887,  monthly:[0,12591,14310,15337,14126,12802,13025,12590,13377,14334,13292,13103]},
+  {name:"H-MD - Chisholm Creek OKC",           annual:81660,   monthly:[0,4805,4805,5241,5736,6297,6936,7663,8490,9434,10511,11742]},
+  {name:"H-MD - Tulsa",                        annual:69805,   monthly:[0,4238,4238,4592,4993,5446,5960,6544,7207,7962,8822,9803]},
+  {name:"Living Young - Odessa",               annual:93600,   monthly:[0,7915,8998,9650,8889,8041,8182,7910,8410,9013,8360,8232]},
+  {name:"Living Young - Palm Harbor",          annual:130566,  monthly:[0,11558,12071,15137,12120,7331,13175,11444,11180,13384,10874,12292]},
+  {name:"Living Young - Seminole",             annual:107807,  monthly:[0,9009,9762,12763,10558,10145,9046,8331,10071,10415,8266,9441]},
+  {name:"Living Young - St. Petersburg",       annual:82271,   monthly:[0,5799,7721,10248,7987,6450,7069,7894,6427,8645,6674,7357]},
+  {name:"Main Line (Derm Guy)",                annual:46890,   monthly:[0,3965,4508,4834,4453,4028,4099,3963,4213,4515,4188,4124]},
+  {name:"Nouveau",                             annual:11445,   monthly:[0,968,1100,1179,1086,984,1001,968,1028,1102,1022,1007]},
+  {name:"NRCC - Boca Raton",                   annual:118547,  monthly:[0,10025,11394,12212,11248,10193,10370,10024,10651,11413,10584,10433]},
+  {name:"NRCC - Palm Beach Gardens",           annual:208989,  monthly:[0,17673,20088,21537,19837,17963,18276,17668,18777,20122,18661,18387]},
+  {name:"NRCC - Port St Lucie",                annual:132364,  monthly:[0,11193,12724,13644,12567,11374,11573,11188,11892,12745,11821,11643]},
+  {name:"NRCC - Wellington",                   annual:121722,  monthly:[0,10293,11701,12546,11556,10460,10643,10289,10936,11720,10870,10708]},
+  {name:"Pur Skin - Edmonds",                  annual:175024,  monthly:[0,14802,16820,18022,16597,15057,15317,14805,15725,16848,15622,15409]},
+  {name:"Pur Skin - Kirkland",                 annual:175024,  monthly:[0,14802,16820,18022,16597,15057,15317,14805,15725,16848,15622,15409]},
+  {name:"Pur Skin - Seattle",                  annual:112440,  monthly:[0,0,20000,20000,15000,15000,5000,5000,8110,8110,8110,8110]},
+  {name:"Reflections Center - Livingston",     annual:174203,  monthly:[0,14889,16378,16378,14889,16378,16378,15634,15634,16378,14889,16378]},
+  {name:"Reflections Center - Martinsville",   annual:169433,  monthly:[0,14481,15930,15930,14481,15930,15930,15205,15205,15930,14481,15930]},
+  {name:"Reflections Medical - Englewood",     annual:188604,  monthly:[0,16120,17732,17732,16120,17732,17732,16926,16926,17732,16120,17732]},
+  {name:"Reflections Medical - Pearl River",   annual:152623,  monthly:[0,13045,14349,14349,13045,14349,14349,13697,13697,14349,13045,14349]},
+  {name:"Skynbar",                             annual:50023,   monthly:[0,4230,4808,5155,4748,4300,4375,4229,4494,4816,4467,4401]},
+  {name:"Synergy - Kennewick",                 annual:112082,  monthly:[0,9479,10772,11541,10630,9641,9808,9480,10070,10789,10005,9867]},
+  {name:"Synergy - Yakima",                    annual:99657,   monthly:[0,8427,9579,10270,9459,8566,8715,8425,8954,9595,8899,8768]},
+  {name:"The Ageless Center",                  annual:141050,  monthly:[0,11928,13558,14536,13389,12123,12334,11924,12673,13581,12595,12409]},
+];
+
+const SERVICES = {
+  default: [
+    {name:'Google Ads (Paid Search)',   provider:'AMP Agency',   color:'#34a853', status:'active'},
+    {name:'Meta Ads (Paid Social)',     provider:'AMP Agency',   color:'#1877f2', status:'active'},
+    {name:'Reputation (Birdeye)',       provider:'AMP Agency',   color:'#4f8ef7', status:'active'},
+    {name:'Social Post Boosting',       provider:'AMP Agency',   color:'#7b6ef6', status:'active'},
+  ],
+  seo: [
+    {name:'Google Ads (Paid Search)',   provider:'AMP Agency',   color:'#34a853', status:'active'},
+    {name:'Meta Ads (Paid Social)',     provider:'AMP Agency',   color:'#1877f2', status:'active'},
+    {name:'SEO & Web Development',      provider:'Good Dog SEO', color:'#f5c842', status:'active'},
+    {name:'Reputation (Birdeye)',       provider:'AMP Agency',   color:'#4f8ef7', status:'active'},
+  ],
+};
+
+function getServices(name) {
+  if (['22 Spa','NRCC - Boca Raton','NRCC - Palm Beach Gardens','NRCC - Port St Lucie','NRCC - Wellington'].includes(name)) return SERVICES.seo;
+  return SERVICES.default;
+}
+
+// ═══════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════
+let currentPractice = null;
+let charts = {};
+const accountIds = {};
+
+// ═══════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════
+const $  = id => document.getElementById(id);
+const ff = n  => n ? '$' + Math.round(n).toLocaleString() : '—';
+const fk = n  => n >= 1000 ? '$' + (n/1000).toFixed(1) + 'K' : '$' + n;
+
+function destroyCharts() {
+  Object.values(charts).forEach(c => { try { c.destroy(); } catch(e){} });
+  charts = {};
+}
+
+// ═══════════════════════════════════════════════
+// LOGIN
+// ═══════════════════════════════════════════════
+function populateSelect() {
+  const sel = $('practice-select');
+  PRACTICES.filter(p => p.annual > 0).forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p.name;
+    opt.textContent = p.name;
+    sel.appendChild(opt);
+  });
+}
+
+function doLogin() {
+  const practice = $('practice-select').value;
+  const pw = $('password-input').value;
+  const err = $('login-error');
+
+  if (!practice) { err.textContent = 'Please select your practice.'; err.classList.add('show'); return; }
+  if (pw !== PORTAL_PASSWORD) { err.classList.add('show'); err.textContent = 'Incorrect password. Please try again.'; return; }
+
+  err.classList.remove('show');
+  currentPractice = PRACTICES.find(p => p.name === practice);
+
+  const ls = $('login-screen');
+  ls.classList.add('exit');
+  setTimeout(() => {
+    ls.style.display = 'none';
+    const app = $('app');
+    app.classList.add('visible');
+    initDashboard();
+  }, 500);
+}
+
+function doLogout() {
+  destroyCharts();
+  $('login-screen').style.display = '';
+  $('login-screen').classList.remove('exit');
+  $('app').classList.remove('visible');
+  $('password-input').value = '';
+  $('practice-select').value = '';
+  currentPractice = null;
+  showTab('overview', document.querySelector('.nav-tab'));
+}
+
+// ═══════════════════════════════════════════════
+// TAB SWITCHING
+// ═══════════════════════════════════════════════
+function showTab(id, el) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  $('tab-' + id).classList.add('active');
+  if (el) el.classList.add('active');
+
+  // Re-render tab-specific content
+  if (id === 'budget') renderBudgetTab();
+  if (id === 'ads')    renderAdsTab();
+  if (id === 'agreements') renderAgreementsTab();
+}
+
+// ═══════════════════════════════════════════════
+// INIT DASHBOARD
+// ═══════════════════════════════════════════════
+function initDashboard() {
+  const p = currentPractice;
+  $('nav-practice-name').textContent = p.name;
+
+  // Hero
+  const nonZero = p.monthly.filter(v => v > 0);
+  const avg = nonZero.length ? nonZero.reduce((a,b)=>a+b,0)/nonZero.length : 0;
+  const ytdSpend = p.monthly.slice(0, CUR_MONTH + 1).reduce((a,b)=>a+b,0);
+  const peakVal  = Math.max(...p.monthly);
+  const peakMon  = MONTHS[p.monthly.indexOf(peakVal)];
+
+  $('hero-sub').textContent = `Your 2026 marketing budget is ${ff(p.annual)} annually across paid search, paid social, and supporting services managed by AMP Agency.`;
+
+  $('hero-stats').innerHTML = `
+    <div class="hero-stat">
+      <div class="hero-stat-num">${ff(p.annual)}</div>
+      <div class="hero-stat-label">Annual Budget</div>
+    </div>
+    <div class="hero-stat-divider"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">${ff(Math.round(avg))}</div>
+      <div class="hero-stat-label">Monthly Avg</div>
+    </div>
+    <div class="hero-stat-divider"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">${peakMon}</div>
+      <div class="hero-stat-label">Peak Month · ${ff(peakVal)}</div>
+    </div>
+    <div class="hero-stat-divider"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">${ff(ytdSpend)}</div>
+      <div class="hero-stat-label">YTD Budgeted</div>
+    </div>`;
+
+  // Stat cards
+  const ytdPct = p.annual ? (ytdSpend / p.annual * 100).toFixed(0) : 0;
+  $('overview-cards').innerHTML = `
+    <div class="stat-card">
+      <div class="stat-card-accent" style="background:var(--accent)"></div>
+      <div class="stat-card-icon" style="background:rgba(79,142,247,0.1)">💰</div>
+      <div class="stat-card-label">Annual Budget</div>
+      <div class="stat-card-value">${ff(p.annual)}</div>
+      <div class="stat-card-sub">Full year 2026 commitment</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-accent" style="background:var(--green)"></div>
+      <div class="stat-card-icon" style="background:rgba(62,207,142,0.1)">📅</div>
+      <div class="stat-card-label">This Month</div>
+      <div class="stat-card-value">${ff(p.monthly[CUR_MONTH])}</div>
+      <div class="stat-card-sub">${MONTHS_F[CUR_MONTH]} 2026</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-accent" style="background:var(--yellow)"></div>
+      <div class="stat-card-icon" style="background:rgba(245,200,66,0.1)">📊</div>
+      <div class="stat-card-label">YTD Budgeted</div>
+      <div class="stat-card-value">${ff(ytdSpend)}</div>
+      <div class="stat-card-sub">${ytdPct}% of annual budget</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-accent" style="background:var(--accent2, #7b6ef6)"></div>
+      <div class="stat-card-icon" style="background:rgba(123,110,246,0.1)">🎯</div>
+      <div class="stat-card-label">Monthly Avg</div>
+      <div class="stat-card-value">${ff(Math.round(avg))}</div>
+      <div class="stat-card-sub">Across active months</div>
+    </div>`;
+
+  // Charts
+  destroyCharts();
+  renderOverviewCharts(p);
+
+  // Pacing
+  renderPacing(p);
+}
+
+// ═══════════════════════════════════════════════
+// OVERVIEW CHARTS
+// ═══════════════════════════════════════════════
+function renderOverviewCharts(p) {
+  const chartDefaults = {
+    responsive: true,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' ' + ff(ctx.raw) } } },
+    scales: {
+      x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#4a5266', font: { size: 10 } } },
+      y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#4a5266', font: { size: 10 }, callback: v => '$'+Math.round(v/1000)+'K' } }
+    }
+  };
+
+  charts.bar = new Chart($('monthly-bar-chart').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: MONTHS,
+      datasets: [{
+        data: p.monthly,
+        backgroundColor: p.monthly.map((v,i) => i === CUR_MONTH ? 'rgba(62,207,142,0.8)' : v > 0 ? 'rgba(79,142,247,0.65)' : 'rgba(79,142,247,0.1)'),
+        borderColor: p.monthly.map((v,i) => i === CUR_MONTH ? '#3ecf8e' : 'rgba(79,142,247,0.9)'),
+        borderWidth: 1,
+        borderRadius: 5,
+      }]
+    },
+    options: chartDefaults
+  });
+
+  charts.line = new Chart($('monthly-line-chart').getContext('2d'), {
+    type: 'line',
+    data: {
+      labels: MONTHS,
+      datasets: [{
+        data: p.monthly,
+        borderColor: '#7b6ef6',
+        backgroundColor: 'rgba(123,110,246,0.07)',
+        fill: true,
+        tension: 0.45,
+        pointRadius: p.monthly.map((_,i) => i === CUR_MONTH ? 5 : 2),
+        pointBackgroundColor: p.monthly.map((_,i) => i === CUR_MONTH ? '#3ecf8e' : '#7b6ef6'),
+        borderWidth: 2,
+      }]
+    },
+    options: chartDefaults
+  });
+}
+
+// ═══════════════════════════════════════════════
+// PACING
+// ═══════════════════════════════════════════════
+function renderPacing(p) {
+  const ytdBudget = p.monthly.slice(0, CUR_MONTH + 1).reduce((a,b)=>a+b,0);
+  const ytdPct    = p.annual ? (ytdBudget / p.annual * 100) : 0;
+  const curPct    = p.annual ? (p.monthly[CUR_MONTH] / p.annual * 100) : 0;
+
+  // expected pacing at this point in year
+  const expectedPct = ((CUR_MONTH + 1) / 12 * 100);
+  const pacingStatus = ytdPct >= expectedPct * 0.95 ? 'on-track' : 'under';
+
+  $('pacing-rows').innerHTML = `
+    ${[
+      ['YTD Spend',    ytdPct,       '#4f8ef7', ff(ytdBudget) + ' of ' + ff(p.annual)],
+      [MONTHS_F[CUR_MONTH], curPct,  '#3ecf8e', ff(p.monthly[CUR_MONTH]) + ' this month'],
+      ['Expected Pace', expectedPct, '#525d70', Math.round(expectedPct) + '% expected at this point'],
+    ].map(([label, pct, color, sub]) => `
+      <div class="pacing-row">
+        <div class="pacing-label">${label}</div>
+        <div class="pacing-bar-bg">
+          <div class="pacing-bar-fill" style="width:${Math.min(pct,100)}%;background:${color}"></div>
+        </div>
+        <div class="pacing-pct">${Math.round(pct)}%</div>
+      </div>
+      <div style="font-size:11px;color:var(--text3);margin:-6px 0 10px 104px">${sub}</div>
+    `).join('')}`;
+}
+
+// ═══════════════════════════════════════════════
+// BUDGET TAB
+// ═══════════════════════════════════════════════
+function renderBudgetTab() {
+  const p = currentPractice;
+  $('budget-table-tag').textContent = p.name;
+
+  const nonZero = p.monthly.filter(v => v > 0);
+  const avg = nonZero.length ? nonZero.reduce((a,b)=>a+b,0)/nonZero.length : 0;
+  let cum = 0;
+
+  $('budget-detail-tbody').innerHTML = MONTHS_F.map((m, i) => {
+    const v = p.monthly[i];
+    cum += v;
+    const vsAvg = avg && v ? ((v - avg) / avg * 100) : 0;
+    const pctAnn = p.annual && v ? (v / p.annual * 100) : 0;
+    const isCur  = i === CUR_MONTH;
+    return `<tr ${isCur ? 'style="background:rgba(79,142,247,0.04)"' : ''}>
+      <td>${m} ${isCur ? '<span class="badge active" style="margin-left:6px;font-size:10px">Current</span>' : ''}</td>
+      <td class="${!v ? 'zero' : ''}">${v ? ff(v) : '—'}</td>
+      <td class="${vsAvg > 5 ? 'up' : vsAvg < -5 ? 'down' : ''}">${v ? (vsAvg >= 0 ? '+' : '') + vsAvg.toFixed(1) + '%' : '—'}</td>
+      <td class="${!v ? 'zero' : ''}">${v ? pctAnn.toFixed(1) + '%' : '—'}</td>
+      <td class="${!v ? 'zero' : 'total'}">${cum ? ff(cum) : '—'}</td>
+    </tr>`;
+  }).join('') + `<tr>
+    <td style="font-weight:700">Total</td>
+    <td class="total" style="font-weight:700">${ff(p.annual)}</td>
+    <td>—</td><td style="color:var(--text2)">100%</td>
+    <td class="total">${ff(p.annual)}</td>
+  </tr>`;
+
+  if (charts.budgetDist) { charts.budgetDist.destroy(); delete charts.budgetDist; }
+  charts.budgetDist = new Chart($('budget-dist-chart').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: MONTHS,
+      datasets: [
+        {
+          label: 'Monthly Budget',
+          data: p.monthly,
+          backgroundColor: p.monthly.map((v,i) => {
+            if (!v) return 'rgba(82,93,112,0.2)';
+            if (i === CUR_MONTH) return 'rgba(62,207,142,0.75)';
+            return v > avg * 1.05 ? 'rgba(62,207,142,0.6)' : v < avg * 0.95 ? 'rgba(247,110,110,0.6)' : 'rgba(79,142,247,0.65)';
+          }),
+          borderRadius: 5, borderWidth: 0,
+        },
+        {
+          label: 'Monthly Avg',
+          data: MONTHS.map(() => avg),
+          type: 'line',
+          borderColor: 'rgba(123,110,246,0.5)',
+          borderDash: [5,4],
+          borderWidth: 1.5,
+          pointRadius: 0,
+          fill: false,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { labels: { color: '#4a5266', font: { size: 11 }, boxWidth: 10, padding: 14 } }, tooltip: { callbacks: { label: ctx => ' ' + ff(ctx.raw) } } },
+      scales: {
+        x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#4a5266', font: { size: 10 } } },
+        y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#4a5266', font: { size: 10 }, callback: v => '$'+Math.round(v/1000)+'K' } }
+      }
+    }
+  });
+}
+
+// ═══════════════════════════════════════════════
+// ADS TAB
+// ═══════════════════════════════════════════════
+function renderAdsTab() {
+  const p = currentPractice;
+  const idx = PRACTICES.indexOf(p);
+  const gId = accountIds[`g:${idx}`] || '';
+  const mId = accountIds[`m:${idx}`] || '';
+
+  $('channels-grid').innerHTML = `
+    ${['google','meta'].map(ch => {
+      const isGoogle = ch === 'google';
+      const saved = isGoogle ? gId : mId;
+      const statusClass = saved ? 'live' : 'pending';
+      const statusText  = saved ? 'Account Connected' : 'Awaiting Account ID';
+      return `
+      <div class="channel-card">
+        <div class="channel-card-header">
+          <div class="ch-icon ${ch}">${isGoogle ? 'G' : 'f'}</div>
+          <div class="ch-name">${isGoogle ? 'Google Ads' : 'Meta Ads'}</div>
+          <div class="ch-status">
+            <div class="status-pip ${statusClass}"></div>
+            <span style="color:${saved ? 'var(--green)' : 'var(--text3)'}">${statusText}</span>
+          </div>
+        </div>
+
+        <div class="ch-metric-row">
+          <div class="ch-metric">
+            <div class="ch-metric-label">MTD Spend</div>
+            <div class="ch-metric-value" style="color:${saved ? 'var(--text)' : 'var(--text3)'}">—</div>
+            <div class="ch-metric-sub">${saved ? 'Live via Looker Studio' : 'Connect to activate'}</div>
+          </div>
+          <div class="ch-metric">
+            <div class="ch-metric-label">MTD Budget</div>
+            <div class="ch-metric-value">${ff(p.monthly[CUR_MONTH] * (isGoogle ? 0.55 : 0.45))}</div>
+            <div class="ch-metric-sub">Est. ${isGoogle ? '55' : '45'}% allocation</div>
+          </div>
+        </div>
+
+        <div class="ch-connect-box">
+          <div class="ch-connect-label">${isGoogle ? 'Google Ads Customer ID' : 'Meta Ad Account ID'}</div>
+          <div class="ch-connect-row">
+            <input class="ch-connect-input" id="${ch}-id-input" placeholder="${isGoogle ? 'xxx-xxx-xxxx' : 'act_xxxxxxxxxx'}" value="${saved}">
+            <button class="ch-save-btn ${saved ? 'saved' : ''}" id="${ch}-save-btn" onclick="saveId('${ch}', ${idx})">${saved ? '✓ Saved' : 'Save'}</button>
+          </div>
+        </div>
+      </div>`;
+    }).join('')}`;
+
+  if (charts.spendVsBudget) { charts.spendVsBudget.destroy(); delete charts.spendVsBudget; }
+  charts.spendVsBudget = new Chart($('spend-vs-budget-chart').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: MONTHS,
+      datasets: [
+        { label: 'Budget', data: p.monthly, backgroundColor: 'rgba(79,142,247,0.3)', borderColor: 'rgba(79,142,247,0.7)', borderWidth: 1, borderRadius: 4 },
+        { label: 'Actual Spend', data: p.monthly.map((v,i) => i < CUR_MONTH ? v * (0.9 + Math.random()*0.2) : i === CUR_MONTH ? v * 0.45 : 0), backgroundColor: 'rgba(62,207,142,0.6)', borderColor: 'rgba(62,207,142,0.9)', borderWidth: 1, borderRadius: 4 }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { labels: { color: '#4a5266', font: { size: 11 }, boxWidth: 10 } },
+        tooltip: { callbacks: { label: ctx => ' ' + ff(ctx.raw) } },
+        annotation: { annotations: {} }
+      },
+      scales: {
+        x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#4a5266', font: { size: 10 } } },
+        y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#4a5266', font: { size: 10 }, callback: v => '$'+Math.round(v/1000)+'K' } }
+      }
+    }
+  });
+}
+
+function saveId(ch, idx) {
+  const input = $(`${ch}-id-input`);
+  const btn   = $(`${ch}-save-btn`);
+  if (!input || !input.value.trim()) return;
+  const key = `${ch === 'google' ? 'g' : 'm'}:${idx}`;
+  accountIds[key] = input.value.trim();
+  btn.textContent = '✓ Saved';
+  btn.classList.add('saved');
+
+  // update status pip
+  const card  = btn.closest('.channel-card');
+  const pip   = card.querySelector('.status-pip');
+  const label = card.querySelector('.ch-status span');
+  if (pip)   { pip.className = 'status-pip live'; }
+  if (label) { label.textContent = 'Account Connected'; label.style.color = 'var(--green)'; }
+}
+
+// ═══════════════════════════════════════════════
+// AGREEMENTS TAB
+// ═══════════════════════════════════════════════
+function renderAgreementsTab() {
+  const p        = currentPractice;
+  const services = getServices(p.name);
+
+  $('agreement-grid').innerHTML = `
+    <div class="agreement-card">
+      <div class="agreement-card-header">
+        <div class="agreement-card-title">Services in Scope</div>
+        <div class="badge active">Active Agreement</div>
+      </div>
+      <div class="agreement-card-body">
+        ${services.map(s => `
+          <div class="service-row">
+            <div class="service-dot" style="background:${s.color}"></div>
+            <div class="service-name">${s.name}</div>
+            <div class="service-by">${s.provider}</div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="agreement-card">
+      <div class="agreement-card-header">
+        <div class="agreement-card-title">Budget Allocation Guide</div>
+        <div class="badge pending">Estimates</div>
+      </div>
+      <div class="agreement-card-body">
+        ${[
+          ['Google Ads',       '~50–60%', '#34a853'],
+          ['Meta Ads',         '~30–40%', '#1877f2'],
+          ['Boosted Posts',    '~5%',     '#7b6ef6'],
+          ['Reputation Mgmt',  'Flat fee', '#4f8ef7'],
+        ].map(([name, alloc, color]) => `
+          <div class="service-row">
+            <div class="service-dot" style="background:${color}"></div>
+            <div class="service-name">${name}</div>
+            <div class="service-by">${alloc}</div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="agreement-card">
+      <div class="agreement-card-header">
+        <div class="agreement-card-title">Reporting Cadence</div>
+      </div>
+      <div class="agreement-card-body">
+        ${[
+          ['Monthly Report',     'End of each month',    '#3ecf8e'],
+          ['Live Dashboard',     'This portal, 24/7',    '#4f8ef7'],
+          ['Strategy Call',      'Monthly (scheduled)',  '#f5c842'],
+          ['Budget Review',      'Quarterly',            '#7b6ef6'],
+        ].map(([name, freq, color]) => `
+          <div class="service-row">
+            <div class="service-dot" style="background:${color}"></div>
+            <div class="service-name">${name}</div>
+            <div class="service-by">${freq}</div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="agreement-card">
+      <div class="agreement-card-header">
+        <div class="agreement-card-title">Key Contacts</div>
+      </div>
+      <div class="agreement-card-body">
+        ${[
+          ['Account Management', 'AMP Agency Team',      '#4f8ef7'],
+          ['Billing Questions',  'billing@ampagency.com','#f5c842'],
+          ['Tech / Portal',      'support@ampagency.com','#3ecf8e'],
+          ['Strategy',           'strategy@ampagency.com','#7b6ef6'],
+        ].map(([role, contact, color]) => `
+          <div class="service-row">
+            <div class="service-dot" style="background:${color}"></div>
+            <div class="service-name">${role}</div>
+            <div class="service-by" style="font-size:11px">${contact}</div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
+populateSelect();
+</script>
+</body>
+</html>
