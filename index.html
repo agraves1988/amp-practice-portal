@@ -29,9 +29,7 @@
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
 html { scroll-behavior: smooth; }
-
 body {
   font-family: 'Geist', sans-serif;
   background: var(--bg);
@@ -41,7 +39,6 @@ body {
   overflow-x: hidden;
 }
 
-/* ── GRAIN OVERLAY ── */
 body::before {
   content: '';
   position: fixed;
@@ -52,530 +49,124 @@ body::before {
   opacity: 0.4;
 }
 
-/* ════════════════════════════════════════
-   LOGIN SCREEN
-════════════════════════════════════════ */
+/* ════ LOGIN ════ */
 #login-screen {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg);
-  z-index: 1000;
+  position: fixed; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg); z-index: 1000;
   transition: opacity 0.5s ease, transform 0.5s ease;
 }
+#login-screen.exit { opacity: 0; transform: scale(0.98); pointer-events: none; }
 
-#login-screen.exit {
-  opacity: 0;
-  transform: scale(0.98);
-  pointer-events: none;
-}
+.login-wrap { width: 100%; max-width: 420px; padding: 20px; animation: fadeUp 0.6s ease both; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
 
-.login-wrap {
-  width: 100%;
-  max-width: 420px;
-  padding: 20px;
-  animation: fadeUp 0.6s ease both;
-}
-
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.login-logo {
-  text-align: center;
-  margin-bottom: 36px;
-}
-
+.login-logo { text-align: center; margin-bottom: 36px; }
 .login-logo-mark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 52px;
-  height: 52px;
-  border-radius: 14px;
-  background: var(--accent);
-  font-size: 20px;
-  font-weight: 700;
-  color: #fff;
-  letter-spacing: -0.5px;
-  margin-bottom: 14px;
-  box-shadow: 0 0 40px rgba(79,142,247,0.35);
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 52px; height: 52px; border-radius: 14px; background: var(--accent);
+  font-size: 20px; font-weight: 700; color: #fff; letter-spacing: -0.5px;
+  margin-bottom: 14px; box-shadow: 0 0 40px rgba(79,142,247,0.35);
 }
-
-.login-logo-name {
-  font-family: 'Instrument Serif', serif;
-  font-size: 28px;
-  color: var(--text);
-  letter-spacing: -0.3px;
-}
-
-.login-logo-sub {
-  font-size: 12px;
-  color: var(--text3);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  margin-top: 4px;
-}
-
-.login-card {
-  background: var(--surface);
-  border: 1px solid var(--border2);
-  border-radius: 16px;
-  padding: 32px;
-  box-shadow: 0 24px 80px rgba(0,0,0,0.4);
-}
-
-.login-card-title {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 6px;
-  color: var(--text);
-}
-
-.login-card-sub {
-  font-size: 13px;
-  color: var(--text3);
-  margin-bottom: 28px;
-  line-height: 1.5;
-}
-
+.login-logo-name { font-family: 'Instrument Serif', serif; font-size: 28px; color: var(--text); }
+.login-logo-sub { font-size: 12px; color: var(--text3); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 4px; }
+.login-card { background: var(--surface); border: 1px solid var(--border2); border-radius: 16px; padding: 32px; box-shadow: 0 24px 80px rgba(0,0,0,0.4); }
+.login-card-title { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+.login-card-sub { font-size: 13px; color: var(--text3); margin-bottom: 28px; line-height: 1.5; }
 .field-group { margin-bottom: 16px; }
-
-.field-label {
-  font-size: 11.5px;
-  font-weight: 500;
-  color: var(--text2);
-  margin-bottom: 7px;
-  letter-spacing: 0.03em;
+.field-label { font-size: 11.5px; font-weight: 500; color: var(--text2); margin-bottom: 7px; letter-spacing: 0.03em; }
+.field-select, .field-input {
+  width: 100%; background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: 10px; padding: 11px 14px; color: var(--text);
+  font-family: 'Geist', sans-serif; font-size: 13.5px; outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s; appearance: none;
 }
-
-.field-select,
-.field-input {
-  width: 100%;
-  background: var(--surface2);
-  border: 1px solid var(--border2);
-  border-radius: 10px;
-  padding: 11px 14px;
-  color: var(--text);
-  font-family: 'Geist', sans-serif;
-  font-size: 13.5px;
-  outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s;
-  appearance: none;
-  -webkit-appearance: none;
-}
-
-.field-select { 
+.field-select {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234a5266' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  padding-right: 36px;
-  cursor: pointer;
+  background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; cursor: pointer;
 }
-
 .field-select option { background: #1c2028; }
-
-.field-input:focus,
-.field-select:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(79,142,247,0.1);
-}
-
+.field-input:focus, .field-select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(79,142,247,0.1); }
 .field-input::placeholder { color: var(--text3); }
-
 .login-btn {
-  width: 100%;
-  padding: 12px;
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  font-family: 'Geist', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 8px;
-  transition: opacity 0.15s, transform 0.1s, box-shadow 0.15s;
+  width: 100%; padding: 12px; background: var(--accent); color: #fff; border: none;
+  border-radius: 10px; font-family: 'Geist', sans-serif; font-size: 14px; font-weight: 600;
+  cursor: pointer; margin-top: 8px; transition: opacity 0.15s, transform 0.1s, box-shadow 0.15s;
   box-shadow: 0 4px 20px rgba(79,142,247,0.3);
 }
-
 .login-btn:hover { opacity: 0.9; box-shadow: 0 6px 28px rgba(79,142,247,0.4); }
 .login-btn:active { transform: scale(0.99); }
-
-.login-error {
-  margin-top: 12px;
-  padding: 10px 14px;
-  background: rgba(247,110,110,0.08);
-  border: 1px solid rgba(247,110,110,0.2);
-  border-radius: 8px;
-  font-size: 12.5px;
-  color: var(--red);
-  display: none;
-}
-
+.login-error { margin-top: 12px; padding: 10px 14px; background: rgba(247,110,110,0.08); border: 1px solid rgba(247,110,110,0.2); border-radius: 8px; font-size: 12.5px; color: var(--red); display: none; }
 .login-error.show { display: block; }
 
-/* ════════════════════════════════════════
-   APP SHELL
-════════════════════════════════════════ */
-#app {
-  display: none;
-  min-height: 100vh;
-  flex-direction: column;
-}
-
+/* ════ APP ════ */
+#app { display: none; min-height: 100vh; flex-direction: column; }
 #app.visible { display: flex; }
 
-/* ── NAV ── */
 #nav {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(8,9,11,0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-  padding: 0 32px;
-  height: 58px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(8,9,11,0.85); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border); padding: 0 32px; height: 58px;
+  display: flex; align-items: center; justify-content: space-between;
 }
-
-.nav-logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.nav-logo-mark {
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
-  background: var(--accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  font-weight: 700;
-  color: #fff;
-}
-
-.nav-logo-name {
-  font-family: 'Instrument Serif', serif;
-  font-size: 18px;
-  color: var(--text);
-}
-
-.nav-logo-divider {
-  width: 1px;
-  height: 16px;
-  background: var(--border2);
-  margin: 0 2px;
-}
-
-.nav-practice-name {
-  font-size: 13px;
-  color: var(--text2);
-  font-weight: 500;
-}
-
+.nav-logo { display: flex; align-items: center; gap: 10px; }
+.nav-logo-mark { width: 30px; height: 30px; border-radius: 8px; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #fff; }
+.nav-logo-name { font-family: 'Instrument Serif', serif; font-size: 18px; color: var(--text); }
+.nav-logo-divider { width: 1px; height: 16px; background: var(--border2); margin: 0 2px; }
+.nav-practice-name { font-size: 13px; color: var(--text2); font-weight: 500; }
 .nav-right { display: flex; align-items: center; gap: 10px; }
-
 .nav-tabs { display: flex; gap: 2px; }
-
-.nav-tab {
-  padding: 6px 14px;
-  border-radius: 7px;
-  font-size: 12.5px;
-  font-weight: 500;
-  color: var(--text3);
-  cursor: pointer;
-  transition: all 0.15s;
-  border: 1px solid transparent;
-}
-
+.nav-tab { padding: 6px 14px; border-radius: 7px; font-size: 12.5px; font-weight: 500; color: var(--text3); cursor: pointer; transition: all 0.15s; border: 1px solid transparent; }
 .nav-tab:hover { color: var(--text2); background: var(--surface); }
 .nav-tab.active { background: var(--surface2); border-color: var(--border2); color: var(--text); }
-
-.nav-logout {
-  padding: 6px 14px;
-  border-radius: 7px;
-  font-size: 12px;
-  color: var(--text3);
-  cursor: pointer;
-  border: 1px solid var(--border);
-  transition: all 0.15s;
-  font-weight: 500;
-}
+.nav-logout { padding: 6px 14px; border-radius: 7px; font-size: 12px; color: var(--text3); cursor: pointer; border: 1px solid var(--border); transition: all 0.15s; font-weight: 500; }
 .nav-logout:hover { color: var(--text2); border-color: var(--border2); }
 
-/* ── PAGE ── */
 #page { flex: 1; }
-
 .tab-content { display: none; padding: 36px 32px; }
 .tab-content.active { display: block; }
 
-/* ════════════════════════════════════════
-   HERO SECTION
-════════════════════════════════════════ */
-.hero {
-  padding: 52px 32px 40px;
-  border-bottom: 1px solid var(--border);
-  position: relative;
-  overflow: hidden;
-}
+/* ════ HERO ════ */
+.hero { padding: 52px 32px 40px; border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; top: -80px; right: -80px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(79,142,247,0.06) 0%, transparent 70%); pointer-events: none; }
+.hero-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; display: flex; align-items: center; gap: 7px; }
+.hero-eyebrow::before { content: ''; width: 18px; height: 1.5px; background: var(--accent); border-radius: 2px; }
+.hero-title { font-family: 'Instrument Serif', serif; font-size: clamp(32px, 4vw, 48px); line-height: 1.1; color: var(--text); margin-bottom: 14px; max-width: 600px; }
+.hero-title em { font-style: italic; color: var(--accent); }
+.hero-sub { font-size: 14px; color: var(--text2); line-height: 1.7; max-width: 480px; margin-bottom: 32px; }
+.hero-stats { display: flex; gap: 32px; flex-wrap: wrap; }
+.hero-stat { display: flex; flex-direction: column; gap: 3px; }
+.hero-stat-num { font-family: 'Geist Mono', monospace; font-size: 22px; font-weight: 600; color: var(--text); }
+.hero-stat-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; }
+.hero-stat-divider { width: 1px; background: var(--border2); align-self: stretch; margin: 4px 0; }
 
-.hero::before {
-  content: '';
-  position: absolute;
-  top: -80px; right: -80px;
-  width: 400px; height: 400px;
-  background: radial-gradient(circle, rgba(79,142,247,0.06) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-.hero-eyebrow {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
-
-.hero-eyebrow::before {
-  content: '';
-  width: 18px; height: 1.5px;
-  background: var(--accent);
-  border-radius: 2px;
-}
-
-.hero-title {
-  font-family: 'Instrument Serif', serif;
-  font-size: clamp(32px, 4vw, 48px);
-  line-height: 1.1;
-  color: var(--text);
-  margin-bottom: 14px;
-  max-width: 600px;
-}
-
-.hero-title em {
-  font-style: italic;
-  color: var(--accent);
-}
-
-.hero-sub {
-  font-size: 14px;
-  color: var(--text2);
-  line-height: 1.7;
-  max-width: 480px;
-  margin-bottom: 32px;
-}
-
-.hero-stats {
-  display: flex;
-  gap: 32px;
-  flex-wrap: wrap;
-}
-
-.hero-stat {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.hero-stat-num {
-  font-family: 'Geist Mono', monospace;
-  font-size: 22px;
-  font-weight: 600;
-  color: var(--text);
-}
-
-.hero-stat-label {
-  font-size: 11px;
-  color: var(--text3);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.hero-stat-divider {
-  width: 1px;
-  background: var(--border2);
-  align-self: stretch;
-  margin: 4px 0;
-}
-
-/* ════════════════════════════════════════
-   STAT CARDS
-════════════════════════════════════════ */
-.cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 12px;
-  margin-bottom: 24px;
-}
-
-.stat-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 20px;
-  position: relative;
-  overflow: hidden;
-  transition: border-color 0.2s;
-}
-
+/* ════ STAT CARDS ════ */
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 24px; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; position: relative; overflow: hidden; transition: border-color 0.2s; }
 .stat-card:hover { border-color: var(--border2); }
+.stat-card-accent { position: absolute; top: 0; left: 0; right: 0; height: 2px; border-radius: 1px 1px 0 0; }
+.stat-card-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; margin-bottom: 14px; }
+.stat-card-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); margin-bottom: 6px; }
+.stat-card-value { font-family: 'Geist Mono', monospace; font-size: 26px; font-weight: 600; color: var(--text); margin-bottom: 4px; line-height: 1; }
+.stat-card-sub { font-size: 11.5px; color: var(--text3); }
 
-.stat-card-accent {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  border-radius: 1px 1px 0 0;
-}
+/* ════ CHARTS ════ */
+.chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px; margin-bottom: 16px; }
+.chart-card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; }
+.chart-card-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+.chart-card-sub { font-size: 12px; color: var(--text3); }
+.chart-tag { font-size: 10.5px; padding: 3px 9px; border-radius: 20px; background: var(--surface3); color: var(--text3); border: 1px solid var(--border); white-space: nowrap; }
+.charts-2col { display: grid; grid-template-columns: 3fr 2fr; gap: 16px; margin-bottom: 16px; }
 
-.stat-card-icon {
-  width: 32px; height: 32px;
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 15px;
-  margin-bottom: 14px;
-}
-
-.stat-card-label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text3);
-  margin-bottom: 6px;
-}
-
-.stat-card-value {
-  font-family: 'Geist Mono', monospace;
-  font-size: 26px;
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: 4px;
-  line-height: 1;
-}
-
-.stat-card-sub {
-  font-size: 11.5px;
-  color: var(--text3);
-}
-
-/* ════════════════════════════════════════
-   CHARTS
-════════════════════════════════════════ */
-.chart-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 22px;
-  margin-bottom: 16px;
-}
-
-.chart-card-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-bottom: 20px;
-}
-
-.chart-card-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: 3px;
-}
-
-.chart-card-sub {
-  font-size: 12px;
-  color: var(--text3);
-}
-
-.chart-tag {
-  font-size: 10.5px;
-  padding: 3px 9px;
-  border-radius: 20px;
-  background: var(--surface3);
-  color: var(--text3);
-  border: 1px solid var(--border);
-  white-space: nowrap;
-}
-
-.charts-2col {
-  display: grid;
-  grid-template-columns: 3fr 2fr;
-  gap: 16px;
-  margin-bottom: 16px;
-}
-
-/* ════════════════════════════════════════
-   BUDGET TABLE
-════════════════════════════════════════ */
-.table-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-  margin-bottom: 16px;
-}
-
-.table-card-header {
-  padding: 18px 22px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.table-card-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text);
-}
-
+/* ════ TABLE ════ */
+.table-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 16px; }
+.table-card-header { padding: 18px 22px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.table-card-title { font-size: 14px; font-weight: 600; color: var(--text); }
 .table-scroll { overflow-x: auto; }
-
-table.data-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.data-table th {
-  padding: 10px 16px;
-  text-align: right;
-  font-size: 10.5px;
-  font-weight: 600;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: var(--text3);
-  background: var(--surface2);
-  border-bottom: 1px solid var(--border);
-  white-space: nowrap;
-}
-
+table.data-table { width: 100%; border-collapse: collapse; }
+.data-table th { padding: 10px 16px; text-align: right; font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text3); background: var(--surface2); border-bottom: 1px solid var(--border); white-space: nowrap; }
 .data-table th:first-child { text-align: left; }
-
-.data-table td {
-  padding: 10px 16px;
-  text-align: right;
-  border-bottom: 1px solid var(--border);
-  font-family: 'Geist Mono', monospace;
-  font-size: 12px;
-  color: var(--text2);
-  white-space: nowrap;
-}
-
+.data-table td { padding: 10px 16px; text-align: right; border-bottom: 1px solid var(--border); font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--text2); white-space: nowrap; }
 .data-table td:first-child { text-align: left; font-family: 'Geist', sans-serif; color: var(--text); font-size: 13px; }
 .data-table tr:last-child td { border-bottom: none; }
 .data-table tr:hover td { background: var(--surface2); }
@@ -584,428 +175,205 @@ table.data-table {
 .data-table td.up { color: var(--green); }
 .data-table td.down { color: var(--red); }
 
-/* ════════════════════════════════════════
-   AD CHANNELS
-════════════════════════════════════════ */
-.channels-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 16px;
+/* ════ CHANNEL CARDS (ads tab) ════ */
+.channel-section { margin-bottom: 32px; }
+.section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.section-header-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; }
+.section-header-icon.google { background: rgba(52,168,83,0.12); color: var(--google); }
+.section-header-icon.meta   { background: rgba(24,119,242,0.12); color: var(--meta); }
+.section-header-title { font-size: 16px; font-weight: 600; color: var(--text); }
+.section-header-sub { font-size: 12px; color: var(--text3); }
+.section-header-status { margin-left: auto; display: flex; align-items: center; gap: 6px; font-size: 11.5px; }
+
+/* Connection panel */
+.connect-panel {
+  background: var(--surface); border: 1px solid var(--border2); border-radius: 12px; padding: 20px; margin-bottom: 16px;
 }
-
-.channel-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 22px;
-  transition: border-color 0.2s;
+.connect-panel-title { font-size: 12px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
+.connect-fields { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 10px; align-items: end; }
+.connect-fields.hubspot-fields { grid-template-columns: 1fr auto; }
+.connect-fields.meta-fields { grid-template-columns: 1fr 1fr auto; }
+.connect-field-label { font-size: 11px; color: var(--text3); margin-bottom: 5px; font-weight: 500; }
+.connect-input {
+  width: 100%; background: var(--surface2); border: 1px solid var(--border2); border-radius: 8px;
+  padding: 9px 12px; color: var(--text); font-family: 'Geist Mono', monospace; font-size: 12px; outline: none;
+  transition: border-color 0.15s;
 }
-
-.channel-card:hover { border-color: var(--border2); }
-
-.channel-card-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 20px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--border);
+.connect-input:focus { border-color: var(--accent); }
+.connect-input::placeholder { color: var(--text3); font-family: 'Geist', sans-serif; }
+.connect-btn {
+  padding: 9px 20px; background: var(--accent); color: #fff; border: none;
+  border-radius: 8px; font-family: 'Geist', sans-serif; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: opacity 0.15s; white-space: nowrap; align-self: end;
 }
+.connect-btn:hover { opacity: 0.85; }
+.connect-btn.loading { opacity: 0.6; pointer-events: none; }
+.connect-btn.connected { background: var(--green); }
 
-.ch-icon {
-  width: 36px; height: 36px;
-  border-radius: 9px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px; font-weight: 700;
-  flex-shrink: 0;
+/* Campaign table */
+.campaign-table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 16px; }
+.campaign-table-wrap .table-card-header { display: flex; align-items: center; justify-content: space-between; }
+.campaign-table-wrap table { width: 100%; border-collapse: collapse; }
+.campaign-table-wrap th { padding: 9px 14px; text-align: right; font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text3); background: var(--surface2); border-bottom: 1px solid var(--border); white-space: nowrap; }
+.campaign-table-wrap th:first-child { text-align: left; }
+.campaign-table-wrap td { padding: 10px 14px; text-align: right; border-bottom: 1px solid var(--border); font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--text2); }
+.campaign-table-wrap td:first-child { text-align: left; font-family: 'Geist', sans-serif; font-size: 13px; color: var(--text); }
+.campaign-table-wrap tr:last-child td { border-bottom: none; }
+.campaign-table-wrap tr:hover td { background: var(--surface2); }
+
+/* Campaign status badges */
+.camp-status { display: inline-flex; align-items: center; gap: 5px; padding: 2px 8px; border-radius: 20px; font-size: 10.5px; font-weight: 500; font-family: 'Geist', sans-serif; }
+.camp-status.active   { background: rgba(62,207,142,0.1);  color: var(--green);  border: 1px solid rgba(62,207,142,0.2); }
+.camp-status.paused   { background: rgba(245,200,66,0.1);  color: var(--yellow); border: 1px solid rgba(245,200,66,0.2); }
+.camp-status.ended    { background: var(--surface3); color: var(--text3); border: 1px solid var(--border); }
+
+/* Meta creative grid */
+.creative-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin-bottom: 16px; }
+.creative-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s;
 }
-
-.ch-icon.google { background: rgba(52,168,83,0.12); color: var(--google); }
-.ch-icon.meta   { background: rgba(24,119,242,0.12); color: var(--meta); }
-
-.ch-name { font-size: 15px; font-weight: 600; color: var(--text); flex: 1; }
-
-.ch-status {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11.5px;
-  font-weight: 500;
+.creative-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+.creative-thumb {
+  width: 100%; aspect-ratio: 4/3; background: var(--surface2);
+  display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;
 }
+.creative-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.creative-thumb-placeholder { display: flex; flex-direction: column; align-items: center; gap: 8px; color: var(--text3); }
+.creative-thumb-placeholder svg { width: 32px; height: 32px; opacity: 0.4; }
+.creative-body { padding: 14px; }
+.creative-headline { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; line-height: 1.35; }
+.creative-copy { font-size: 11.5px; color: var(--text3); line-height: 1.5; margin-bottom: 10px; }
+.creative-meta { display: flex; align-items: center; justify-content: space-between; }
+.creative-cta { font-size: 10.5px; padding: 4px 10px; background: rgba(24,119,242,0.15); color: #5ba0ff; border-radius: 6px; font-weight: 600; }
+.creative-stats { font-size: 10.5px; color: var(--text3); font-family: 'Geist Mono', monospace; }
+.creative-format { font-size: 10px; padding: 2px 7px; background: var(--surface3); color: var(--text3); border-radius: 4px; border: 1px solid var(--border); }
 
-.status-pip {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-}
+/* Leads section */
+.leads-section { margin-top: 8px; }
+.leads-filter-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.leads-filter-bar .chart-tag { cursor: pointer; transition: all 0.15s; }
+.leads-filter-bar .chart-tag:hover { background: var(--surface2); color: var(--text2); }
+.leads-filter-bar .chart-tag.active-filter { background: rgba(79,142,247,0.12); color: var(--accent); border-color: rgba(79,142,247,0.3); }
+.lead-row-name { display: flex; flex-direction: column; gap: 2px; }
+.lead-row-name span { font-size: 11.5px; color: var(--text3); font-family: 'Geist', sans-serif; }
 
+/* Status pip */
+.status-pip { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 .status-pip.live    { background: var(--green); box-shadow: 0 0 6px var(--green); animation: blink 2s infinite; }
 .status-pip.pending { background: var(--yellow); }
 .status-pip.none    { background: var(--text3); }
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.35;} }
 
-@keyframes blink {
-  0%,100% { opacity:1; }
-  50%      { opacity:0.35; }
-}
+/* Skeleton / loading */
+.skeleton { background: linear-gradient(90deg, var(--surface2) 25%, var(--surface3) 50%, var(--surface2) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 6px; }
+@keyframes shimmer { 0%{background-position:200% 0;} 100%{background-position:-200% 0;} }
+.skeleton-row { height: 44px; margin-bottom: 2px; border-radius: 0; }
+.skeleton-card { height: 220px; border-radius: 12px; }
 
-.ch-metric-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 10px;
-}
+/* Info boxes */
+.info-box { padding: 14px 18px; border-radius: 10px; font-size: 12.5px; line-height: 1.6; margin-bottom: 16px; display: flex; gap: 12px; align-items: flex-start; }
+.info-box.blue  { background: rgba(79,142,247,0.06); border: 1px solid rgba(79,142,247,0.18); color: var(--text2); }
+.info-box.green { background: rgba(62,207,142,0.06); border: 1px solid rgba(62,207,142,0.18); color: var(--text2); }
+.info-box.yellow { background: rgba(245,200,66,0.06); border: 1px solid rgba(245,200,66,0.18); color: var(--text2); }
+.info-box-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
 
-.ch-metric {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 12px;
-}
-
-.ch-metric-label {
-  font-size: 10.5px;
-  color: var(--text3);
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  margin-bottom: 5px;
-}
-
-.ch-metric-value {
-  font-family: 'Geist Mono', monospace;
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--text);
-}
-
-.ch-metric-sub {
-  font-size: 11px;
-  color: var(--text3);
-  margin-top: 2px;
-}
-
-.ch-connect-box {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 9px;
-  padding: 14px;
-}
-
-.ch-connect-label {
-  font-size: 11px;
-  color: var(--text3);
-  margin-bottom: 8px;
-  font-weight: 500;
-}
-
-.ch-connect-row {
-  display: flex;
-  gap: 8px;
-}
-
-.ch-connect-input {
-  flex: 1;
-  background: var(--surface3);
-  border: 1px solid var(--border2);
-  border-radius: 7px;
-  padding: 8px 11px;
-  color: var(--text);
-  font-family: 'Geist Mono', monospace;
-  font-size: 12px;
-  outline: none;
-  transition: border-color 0.15s;
-}
-
-.ch-connect-input:focus { border-color: var(--accent); }
-.ch-connect-input::placeholder { color: var(--text3); }
-
-.ch-save-btn {
-  padding: 8px 16px;
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  border-radius: 7px;
-  font-family: 'Geist', sans-serif;
-  font-size: 12.5px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.15s;
-  white-space: nowrap;
-}
-
-.ch-save-btn:hover { opacity: 0.85; }
-.ch-save-btn.saved { background: var(--green); }
-
-/* ════════════════════════════════════════
-   AGREEMENTS
-════════════════════════════════════════ */
-.agreement-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 16px;
-}
-
-.agreement-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.agreement-card-header {
-  padding: 16px 20px;
-  background: var(--surface2);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.agreement-card-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text);
-}
-
+/* Agreements */
+.agreement-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.agreement-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.agreement-card-header { padding: 16px 20px; background: var(--surface2); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.agreement-card-title { font-size: 13px; font-weight: 600; color: var(--text); }
 .agreement-card-body { padding: 6px 0; }
-
-.service-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 11px 20px;
-  border-bottom: 1px solid var(--border);
-  transition: background 0.12s;
-}
-
+.service-row { display: flex; align-items: center; gap: 12px; padding: 11px 20px; border-bottom: 1px solid var(--border); transition: background 0.12s; }
 .service-row:last-child { border-bottom: none; }
 .service-row:hover { background: var(--surface2); }
-
-.service-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.service-name {
-  font-size: 13px;
-  color: var(--text2);
-  flex: 1;
-}
-
-.service-by {
-  font-size: 11.5px;
-  color: var(--text3);
-  font-family: 'Geist Mono', monospace;
-}
-
-.badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 2px 9px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 500;
-}
-
-.badge.active   { background: rgba(62,207,142,0.1);  color: var(--green); border: 1px solid rgba(62,207,142,0.2); }
+.service-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.service-name { font-size: 13px; color: var(--text2); flex: 1; }
+.service-by { font-size: 11.5px; color: var(--text3); font-family: 'Geist Mono', monospace; }
+.badge { display: inline-flex; align-items: center; padding: 2px 9px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+.badge.active   { background: rgba(62,207,142,0.1);  color: var(--green);  border: 1px solid rgba(62,207,142,0.2); }
 .badge.pending  { background: rgba(245,200,66,0.1);  color: var(--yellow); border: 1px solid rgba(245,200,66,0.2); }
 .badge.inactive { background: var(--surface3); color: var(--text3); border: 1px solid var(--border); }
 
-/* ════════════════════════════════════════
-   NOTICE / INFO BOXES
-════════════════════════════════════════ */
-.info-box {
-  padding: 14px 18px;
-  border-radius: 10px;
-  font-size: 12.5px;
-  line-height: 1.6;
-  margin-bottom: 16px;
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-}
-
-.info-box.blue {
-  background: rgba(79,142,247,0.06);
-  border: 1px solid rgba(79,142,247,0.18);
-  color: var(--text2);
-}
-
-.info-box.green {
-  background: rgba(62,207,142,0.06);
-  border: 1px solid rgba(62,207,142,0.18);
-  color: var(--text2);
-}
-
-.info-box-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
-
-/* ════════════════════════════════════════
-   CONTACT CARD
-════════════════════════════════════════ */
-.contact-strip {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 22px;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 16px;
-}
-
-.contact-avatar {
-  width: 44px; height: 44px;
-  border-radius: 50%;
-  background: var(--accent);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px; font-weight: 700; color: #fff;
-  flex-shrink: 0;
-}
-
+/* Contact strip */
+.contact-strip { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px; display: flex; align-items: center; gap: 20px; margin-bottom: 16px; }
+.contact-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: #fff; flex-shrink: 0; }
 .contact-info { flex: 1; }
 .contact-name { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
 .contact-role { font-size: 12px; color: var(--text3); }
-
 .contact-actions { display: flex; gap: 8px; }
-
-.contact-btn {
-  padding: 7px 16px;
-  border-radius: 8px;
-  font-size: 12.5px;
-  font-weight: 500;
-  cursor: pointer;
-  border: 1px solid var(--border2);
-  background: var(--surface2);
-  color: var(--text2);
-  font-family: 'Geist', sans-serif;
-  text-decoration: none;
-  transition: all 0.15s;
-}
-
+.contact-btn { padding: 7px 16px; border-radius: 8px; font-size: 12.5px; font-weight: 500; cursor: pointer; border: 1px solid var(--border2); background: var(--surface2); color: var(--text2); font-family: 'Geist', sans-serif; text-decoration: none; transition: all 0.15s; }
 .contact-btn:hover { background: var(--surface3); color: var(--text); }
 .contact-btn.primary { background: var(--accent); color: #fff; border-color: transparent; box-shadow: 0 2px 12px rgba(79,142,247,0.25); }
 .contact-btn.primary:hover { opacity: 0.88; }
 
-/* ════════════════════════════════════════
-   PROGRESS BAR (budget pacing)
-════════════════════════════════════════ */
-.pacing-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 22px;
-  margin-bottom: 16px;
-}
-
-.pacing-row {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 12px;
-}
-
+/* Pacing */
+.pacing-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px; margin-bottom: 16px; }
+.pacing-row { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
 .pacing-row:last-child { margin-bottom: 0; }
-
 .pacing-label { font-size: 12.5px; color: var(--text2); width: 90px; flex-shrink: 0; }
+.pacing-bar-bg { flex: 1; height: 6px; background: var(--surface3); border-radius: 3px; overflow: hidden; }
+.pacing-bar-fill { height: 100%; border-radius: 3px; transition: width 1s cubic-bezier(0.4,0,0.2,1); }
+.pacing-pct { font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--text3); width: 40px; text-align: right; flex-shrink: 0; }
 
-.pacing-bar-bg {
-  flex: 1;
-  height: 6px;
-  background: var(--surface3);
-  border-radius: 3px;
-  overflow: hidden;
-}
+/* Empty state */
+.empty-state { padding: 48px 24px; text-align: center; color: var(--text3); }
+.empty-state-icon { font-size: 32px; margin-bottom: 12px; opacity: 0.4; }
+.empty-state-title { font-size: 14px; font-weight: 500; color: var(--text2); margin-bottom: 6px; }
+.empty-state-sub { font-size: 12.5px; line-height: 1.6; }
 
-.pacing-bar-fill {
-  height: 100%;
-  border-radius: 3px;
-  transition: width 1s cubic-bezier(0.4,0,0.2,1);
-}
+/* Error state */
+.error-state { padding: 20px; text-align: center; color: var(--red); font-size: 12.5px; }
 
-.pacing-pct {
-  font-family: 'Geist Mono', monospace;
-  font-size: 12px;
-  color: var(--text3);
-  width: 40px;
-  text-align: right;
-  flex-shrink: 0;
-}
+/* Divider */
+.section-divider { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
 
-/* ════════════════════════════════════════
-   FOOTER
-════════════════════════════════════════ */
-footer {
-  border-top: 1px solid var(--border);
-  padding: 20px 32px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: var(--text3);
-  font-size: 12px;
-}
+footer { border-top: 1px solid var(--border); padding: 20px 32px; display: flex; align-items: center; justify-content: space-between; color: var(--text3); font-size: 12px; }
 
-/* ════════════════════════════════════════
-   ANIMATIONS
-════════════════════════════════════════ */
-.reveal {
-  opacity: 0;
-  transform: translateY(12px);
-  animation: reveal 0.5s ease forwards;
-}
-
-@keyframes reveal {
-  to { opacity: 1; transform: translateY(0); }
-}
-
+.reveal { opacity: 0; transform: translateY(12px); animation: reveal 0.5s ease forwards; }
+@keyframes reveal { to { opacity:1; transform:translateY(0); } }
 .reveal-1 { animation-delay: 0.05s; }
 .reveal-2 { animation-delay: 0.12s; }
 .reveal-3 { animation-delay: 0.19s; }
 .reveal-4 { animation-delay: 0.26s; }
 
-/* Scrollbar */
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
 
 @media (max-width: 768px) {
-  .charts-2col, .channels-grid, .agreement-grid { grid-template-columns: 1fr; }
+  .charts-2col, .agreement-grid { grid-template-columns: 1fr; }
+  .connect-fields, .connect-fields.meta-fields { grid-template-columns: 1fr; }
   .hero-stats { gap: 18px; }
   .nav-tabs { display: none; }
   #nav { padding: 0 16px; }
   .tab-content { padding: 20px 16px; }
   .hero { padding: 32px 16px; }
+  .creative-grid { grid-template-columns: 1fr 1fr; }
 }
 </style>
 </head>
 <body>
 
-<!-- ════ LOGIN SCREEN ════ -->
+<!-- ════ LOGIN ════ -->
 <div id="login-screen">
   <div class="login-wrap">
     <div class="login-logo">
-      <div>
-        <div class="login-logo-mark">A</div>
-      </div>
+      <div><div class="login-logo-mark">A</div></div>
       <div class="login-logo-name">AMP Agency</div>
       <div class="login-logo-sub">Client Portal · 2026</div>
     </div>
     <div class="login-card">
       <div class="login-card-title">Welcome back</div>
       <div class="login-card-sub">Select your practice and enter the portal password to access your marketing dashboard.</div>
-
       <div class="field-group">
         <div class="field-label">Your Practice</div>
-        <select class="field-select" id="practice-select">
-          <option value="">— Select a practice —</option>
-        </select>
+        <select class="field-select" id="practice-select"><option value="">— Select a practice —</option></select>
       </div>
-
       <div class="field-group">
         <div class="field-label">Portal Password</div>
         <input class="field-input" type="password" id="password-input" placeholder="Enter password" onkeydown="if(event.key==='Enter') doLogin()">
       </div>
-
       <button class="login-btn" onclick="doLogin()">Access Dashboard →</button>
       <div class="login-error" id="login-error">Incorrect password. Please try again.</div>
     </div>
@@ -1014,8 +382,6 @@ footer {
 
 <!-- ════ APP ════ -->
 <div id="app">
-
-  <!-- NAV -->
   <nav id="nav">
     <div class="nav-logo">
       <div class="nav-logo-mark">A</div>
@@ -1028,13 +394,13 @@ footer {
         <div class="nav-tab active" onclick="showTab('overview', this)">Overview</div>
         <div class="nav-tab" onclick="showTab('budget', this)">Budget</div>
         <div class="nav-tab" onclick="showTab('ads', this)">Ad Spend</div>
+        <div class="nav-tab" onclick="showTab('leads', this)">Leads</div>
         <div class="nav-tab" onclick="showTab('agreements', this)">Agreement</div>
       </div>
       <div class="nav-logout" onclick="doLogout()">Log out</div>
     </div>
   </nav>
 
-  <!-- PAGE -->
   <div id="page">
 
     <!-- ── OVERVIEW TAB ── -->
@@ -1045,42 +411,30 @@ footer {
         <div class="hero-sub" id="hero-sub">Budget tracking, ad performance, and agency services — all in one place.</div>
         <div class="hero-stats" id="hero-stats"></div>
       </div>
-
       <div style="padding: 32px 32px 0;" class="reveal reveal-1">
         <div class="cards-grid" id="overview-cards"></div>
       </div>
-
       <div style="padding: 0 32px;" class="reveal reveal-2">
         <div class="charts-2col">
           <div class="chart-card">
             <div class="chart-card-header">
-              <div>
-                <div class="chart-card-title">Monthly Budget — 2026</div>
-                <div class="chart-card-sub">Budgeted spend by month</div>
-              </div>
+              <div><div class="chart-card-title">Monthly Budget — 2026</div><div class="chart-card-sub">Budgeted spend by month</div></div>
               <div class="chart-tag">Full Year</div>
             </div>
             <canvas id="monthly-bar-chart" height="85"></canvas>
           </div>
           <div class="chart-card">
             <div class="chart-card-header">
-              <div>
-                <div class="chart-card-title">Spend Curve</div>
-                <div class="chart-card-sub">Budget trajectory</div>
-              </div>
+              <div><div class="chart-card-title">Spend Curve</div><div class="chart-card-sub">Budget trajectory</div></div>
             </div>
             <canvas id="monthly-line-chart" height="85"></canvas>
           </div>
         </div>
       </div>
-
       <div style="padding: 0 32px 32px;" class="reveal reveal-3">
         <div class="pacing-card" id="pacing-card">
           <div class="chart-card-header" style="margin-bottom:18px;padding:0">
-            <div>
-              <div class="chart-card-title">YTD Budget Pacing</div>
-              <div class="chart-card-sub">Jan – current month vs. annual total</div>
-            </div>
+            <div><div class="chart-card-title">YTD Budget Pacing</div><div class="chart-card-sub">Jan – current month vs. annual total</div></div>
           </div>
           <div id="pacing-rows"></div>
         </div>
@@ -1096,27 +450,15 @@ footer {
         </div>
         <div class="table-scroll">
           <table class="data-table" id="budget-detail-table">
-            <thead>
-              <tr>
-                <th>Month</th>
-                <th>Budget</th>
-                <th>vs. Monthly Avg</th>
-                <th>% of Annual</th>
-                <th>Cumulative</th>
-              </tr>
-            </thead>
+            <thead><tr><th>Month</th><th>Budget</th><th>vs. Monthly Avg</th><th>% of Annual</th><th>Cumulative</th></tr></thead>
             <tbody id="budget-detail-tbody"></tbody>
           </table>
         </div>
       </div>
-
       <div style="margin-top:16px" class="reveal reveal-2">
         <div class="chart-card">
           <div class="chart-card-header">
-            <div>
-              <div class="chart-card-title">Budget Distribution</div>
-              <div class="chart-card-sub">Monthly vs. annual average — green = above avg, red = below</div>
-            </div>
+            <div><div class="chart-card-title">Budget Distribution</div><div class="chart-card-sub">Monthly vs. annual average — green = above avg, red = below</div></div>
           </div>
           <canvas id="budget-dist-chart" height="75"></canvas>
         </div>
@@ -1125,23 +467,124 @@ footer {
 
     <!-- ── ADS TAB ── -->
     <div class="tab-content" id="tab-ads">
-      <div class="info-box blue reveal">
-        <div class="info-box-icon">📡</div>
-        <div>Live ad spend data pulls directly from your Google Ads and Meta Ads accounts via Looker Studio connectors. Enter your account IDs below to activate. Data refreshes every 6–12 hours.</div>
-      </div>
 
-      <div class="channels-grid reveal reveal-1" id="channels-grid"></div>
-
-      <div class="chart-card reveal reveal-2">
-        <div class="chart-card-header">
+      <!-- GOOGLE ADS SECTION -->
+      <div class="channel-section reveal">
+        <div class="section-header">
+          <div class="section-header-icon google">G</div>
           <div>
-            <div class="chart-card-title">Budget vs. Actual Spend</div>
-            <div class="chart-card-sub">Once ad accounts are connected, this chart shows live pacing data month over month.</div>
+            <div class="section-header-title">Google Ads</div>
+            <div class="section-header-sub">Search, Display & Performance Max campaigns</div>
           </div>
-          <div class="chart-tag">Live when connected</div>
+          <div class="section-header-status" id="google-status-bar">
+            <div class="status-pip none" id="google-pip"></div>
+            <span id="google-status-label" style="color:var(--text3)">Not connected</span>
+          </div>
         </div>
-        <canvas id="spend-vs-budget-chart" height="80"></canvas>
+
+        <div class="connect-panel">
+          <div class="connect-panel-title">Google Ads Connection</div>
+          <div class="connect-fields" id="google-connect-fields">
+            <div>
+              <div class="connect-field-label">Customer ID</div>
+              <input class="connect-input" id="google-customer-id" placeholder="e.g. 123-456-7890">
+            </div>
+            <div>
+              <div class="connect-field-label">Developer Token</div>
+              <input class="connect-input" id="google-dev-token" placeholder="Developer token" type="password">
+            </div>
+            <div>
+              <div class="connect-field-label">Access Token / OAuth</div>
+              <input class="connect-input" id="google-access-token" placeholder="OAuth access token" type="password">
+            </div>
+            <button class="connect-btn" id="google-connect-btn" onclick="connectGoogle()">Load Campaigns</button>
+          </div>
+        </div>
+
+        <div id="google-campaigns-wrap">
+          <div class="empty-state">
+            <div class="empty-state-icon">📊</div>
+            <div class="empty-state-title">Google Ads not connected</div>
+            <div class="empty-state-sub">Enter your credentials above to load live campaign data.</div>
+          </div>
+        </div>
       </div>
+
+      <hr class="section-divider">
+
+      <!-- META ADS SECTION -->
+      <div class="channel-section reveal reveal-1">
+        <div class="section-header">
+          <div class="section-header-icon meta">f</div>
+          <div>
+            <div class="section-header-title">Meta Ads</div>
+            <div class="section-header-sub">Facebook & Instagram campaigns with live creative</div>
+          </div>
+          <div class="section-header-status" id="meta-status-bar">
+            <div class="status-pip none" id="meta-pip"></div>
+            <span id="meta-status-label" style="color:var(--text3)">Not connected</span>
+          </div>
+        </div>
+
+        <div class="connect-panel">
+          <div class="connect-panel-title">Meta Ads Connection</div>
+          <div class="connect-fields meta-fields">
+            <div>
+              <div class="connect-field-label">Ad Account ID</div>
+              <input class="connect-input" id="meta-account-id" placeholder="act_xxxxxxxxxx">
+            </div>
+            <div>
+              <div class="connect-field-label">Access Token</div>
+              <input class="connect-input" id="meta-access-token" placeholder="Meta user access token" type="password">
+            </div>
+            <button class="connect-btn" id="meta-connect-btn" onclick="connectMeta()">Load Campaigns</button>
+          </div>
+        </div>
+
+        <div id="meta-campaigns-wrap">
+          <div class="empty-state">
+            <div class="empty-state-icon">📱</div>
+            <div class="empty-state-title">Meta Ads not connected</div>
+            <div class="empty-state-sub">Enter your Ad Account ID and access token to load campaigns and live creative.</div>
+          </div>
+        </div>
+
+        <div id="meta-creatives-wrap" style="display:none">
+          <div class="table-card-header" style="padding: 0 0 14px 0; border:none;">
+            <div class="chart-card-title">Live Ad Creative</div>
+            <div class="chart-tag">From Meta Ads Manager</div>
+          </div>
+          <div class="creative-grid" id="meta-creative-grid"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── LEADS TAB ── -->
+    <div class="tab-content" id="tab-leads">
+
+      <div class="connect-panel reveal">
+        <div class="connect-panel-title">HubSpot Connection</div>
+        <div class="connect-fields hubspot-fields">
+          <div>
+            <div class="connect-field-label">HubSpot Private App Token</div>
+            <input class="connect-input" id="hubspot-token" placeholder="pat-na1-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" type="password">
+          </div>
+          <button class="connect-btn" id="hubspot-connect-btn" onclick="connectHubspot()">Load Leads</button>
+        </div>
+        <div style="margin-top:10px; font-size:11.5px; color:var(--text3); line-height:1.6;">
+          Leads are filtered by the <code style="background:var(--surface3);padding:1px 5px;border-radius:4px;color:var(--accent)">marketing_channel_ashton</code> deal property. Your token needs <strong style="color:var(--text2)">crm.objects.deals.read</strong> and <strong style="color:var(--text2)">crm.objects.contacts.read</strong> scopes.
+        </div>
+      </div>
+
+      <div id="hubspot-leads-wrap" class="leads-section reveal reveal-1">
+        <div class="empty-state">
+          <div class="empty-state-icon">👥</div>
+          <div class="empty-state-title">HubSpot not connected</div>
+          <div class="empty-state-sub">Enter your private app token above to pull leads filtered by marketing channel.</div>
+        </div>
+      </div>
+
     </div>
 
     <!-- ── AGREEMENTS TAB ── -->
@@ -1156,9 +599,7 @@ footer {
           <a href="mailto:questions@ampagency.com" class="contact-btn primary">Email Us</a>
         </div>
       </div>
-
       <div class="agreement-grid reveal reveal-1" id="agreement-grid"></div>
-
       <div class="info-box green reveal reveal-2">
         <div class="info-box-icon">✓</div>
         <div>All services listed above are actively managed by AMP Agency on your behalf. Agency management fees are billed monthly per your signed agreement. Contact your account manager with any questions about scope or billing.</div>
@@ -1171,7 +612,6 @@ footer {
     <div>© 2026 AMP Agency · Client Portal</div>
     <div>Data refreshes daily · <span style="color:var(--accent)">Support: questions@ampagency.com</span></div>
   </footer>
-
 </div><!-- /app -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
@@ -1180,10 +620,9 @@ footer {
 // DATA
 // ═══════════════════════════════════════════════
 const PORTAL_PASSWORD = 'AMP2026';
-
-const MONTHS     = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-const MONTHS_F   = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-const CUR_MONTH  = new Date().getMonth(); // 0-indexed
+const MONTHS    = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MONTHS_F  = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const CUR_MONTH = new Date().getMonth();
 
 const PRACTICES = [
   {name:"22 Spa",                              annual:314576,  monthly:[0,26601,30240,32426,29868,27031,27504,26589,28263,30290,28093,27671]},
@@ -1289,18 +728,44 @@ function getServices(name) {
 // ═══════════════════════════════════════════════
 let currentPractice = null;
 let charts = {};
-const accountIds = {};
 
 // ═══════════════════════════════════════════════
 // HELPERS
 // ═══════════════════════════════════════════════
 const $  = id => document.getElementById(id);
 const ff = n  => n ? '$' + Math.round(n).toLocaleString() : '—';
-const fk = n  => n >= 1000 ? '$' + (n/1000).toFixed(1) + 'K' : '$' + n;
 
 function destroyCharts() {
   Object.values(charts).forEach(c => { try { c.destroy(); } catch(e){} });
   charts = {};
+}
+
+// ═══════════════════════════════════════════════
+// ANTHROPIC API HELPER
+// Used as backend-for-frontend to fetch + structure
+// live ad/lead data from Google, Meta, HubSpot.
+// Swap the system prompts for real API proxies in prod.
+// ═══════════════════════════════════════════════
+async function callClaude(systemPrompt, userMessage, expectJSON = true) {
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: userMessage }]
+    })
+  });
+  const data = await resp.json();
+  if (!resp.ok) throw new Error(data.error?.message || 'API error');
+  const text = data.content.map(b => b.text || '').join('');
+  if (!expectJSON) return text;
+  try {
+    return JSON.parse(text.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim());
+  } catch {
+    throw new Error('Invalid JSON from API');
+  }
 }
 
 // ═══════════════════════════════════════════════
@@ -1310,8 +775,7 @@ function populateSelect() {
   const sel = $('practice-select');
   PRACTICES.filter(p => p.annual > 0).forEach(p => {
     const opt = document.createElement('option');
-    opt.value = p.name;
-    opt.textContent = p.name;
+    opt.value = p.name; opt.textContent = p.name;
     sel.appendChild(opt);
   });
 }
@@ -1320,19 +784,15 @@ function doLogin() {
   const practice = $('practice-select').value;
   const pw = $('password-input').value;
   const err = $('login-error');
-
   if (!practice) { err.textContent = 'Please select your practice.'; err.classList.add('show'); return; }
   if (pw !== PORTAL_PASSWORD) { err.classList.add('show'); err.textContent = 'Incorrect password. Please try again.'; return; }
-
   err.classList.remove('show');
   currentPractice = PRACTICES.find(p => p.name === practice);
-
   const ls = $('login-screen');
   ls.classList.add('exit');
   setTimeout(() => {
     ls.style.display = 'none';
-    const app = $('app');
-    app.classList.add('visible');
+    $('app').classList.add('visible');
     initDashboard();
   }, 500);
 }
@@ -1345,7 +805,27 @@ function doLogout() {
   $('password-input').value = '';
   $('practice-select').value = '';
   currentPractice = null;
+  // Reset connection states
+  resetConnectionPanels();
   showTab('overview', document.querySelector('.nav-tab'));
+}
+
+function resetConnectionPanels() {
+  ['google-pip','meta-pip'].forEach(id => {
+    const el = $(id); if (el) { el.className = 'status-pip none'; }
+  });
+  const gl = $('google-status-label'); if(gl){gl.textContent='Not connected';gl.style.color='var(--text3)';}
+  const ml = $('meta-status-label');   if(ml){ml.textContent='Not connected';ml.style.color='var(--text3)';}
+  ['google-campaigns-wrap','meta-campaigns-wrap'].forEach(id => {
+    const el = $(id);
+    if (el) el.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📊</div><div class="empty-state-title">Not connected</div></div>';
+  });
+  const cw = $('meta-creatives-wrap'); if(cw) cw.style.display='none';
+  const hw = $('hubspot-leads-wrap');
+  if(hw) hw.innerHTML = '<div class="empty-state"><div class="empty-state-icon">👥</div><div class="empty-state-title">HubSpot not connected</div></div>';
+  ['google-connect-btn','meta-connect-btn','hubspot-connect-btn'].forEach(id => {
+    const b = $(id); if(b){b.textContent = id.includes('google')?'Load Campaigns':id.includes('meta')?'Load Campaigns':'Load Leads';b.className='connect-btn';}
+  });
 }
 
 // ═══════════════════════════════════════════════
@@ -1356,21 +836,16 @@ function showTab(id, el) {
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   $('tab-' + id).classList.add('active');
   if (el) el.classList.add('active');
-
-  // Re-render tab-specific content
   if (id === 'budget') renderBudgetTab();
-  if (id === 'ads')    renderAdsTab();
   if (id === 'agreements') renderAgreementsTab();
 }
 
 // ═══════════════════════════════════════════════
-// INIT DASHBOARD
+// INIT
 // ═══════════════════════════════════════════════
 function initDashboard() {
   const p = currentPractice;
   $('nav-practice-name').textContent = p.name;
-
-  // Hero
   const nonZero = p.monthly.filter(v => v > 0);
   const avg = nonZero.length ? nonZero.reduce((a,b)=>a+b,0)/nonZero.length : 0;
   const ytdSpend = p.monthly.slice(0, CUR_MONTH + 1).reduce((a,b)=>a+b,0);
@@ -1378,65 +853,24 @@ function initDashboard() {
   const peakMon  = MONTHS[p.monthly.indexOf(peakVal)];
 
   $('hero-sub').textContent = `Your 2026 marketing budget is ${ff(p.annual)} annually across paid search, paid social, and supporting services managed by AMP Agency.`;
-
   $('hero-stats').innerHTML = `
-    <div class="hero-stat">
-      <div class="hero-stat-num">${ff(p.annual)}</div>
-      <div class="hero-stat-label">Annual Budget</div>
-    </div>
+    <div class="hero-stat"><div class="hero-stat-num">${ff(p.annual)}</div><div class="hero-stat-label">Annual Budget</div></div>
     <div class="hero-stat-divider"></div>
-    <div class="hero-stat">
-      <div class="hero-stat-num">${ff(Math.round(avg))}</div>
-      <div class="hero-stat-label">Monthly Avg</div>
-    </div>
+    <div class="hero-stat"><div class="hero-stat-num">${ff(Math.round(avg))}</div><div class="hero-stat-label">Monthly Avg</div></div>
     <div class="hero-stat-divider"></div>
-    <div class="hero-stat">
-      <div class="hero-stat-num">${peakMon}</div>
-      <div class="hero-stat-label">Peak Month · ${ff(peakVal)}</div>
-    </div>
+    <div class="hero-stat"><div class="hero-stat-num">${peakMon}</div><div class="hero-stat-label">Peak Month · ${ff(peakVal)}</div></div>
     <div class="hero-stat-divider"></div>
-    <div class="hero-stat">
-      <div class="hero-stat-num">${ff(ytdSpend)}</div>
-      <div class="hero-stat-label">YTD Budgeted</div>
-    </div>`;
+    <div class="hero-stat"><div class="hero-stat-num">${ff(ytdSpend)}</div><div class="hero-stat-label">YTD Budgeted</div></div>`;
 
-  // Stat cards
   const ytdPct = p.annual ? (ytdSpend / p.annual * 100).toFixed(0) : 0;
   $('overview-cards').innerHTML = `
-    <div class="stat-card">
-      <div class="stat-card-accent" style="background:var(--accent)"></div>
-      <div class="stat-card-icon" style="background:rgba(79,142,247,0.1)">💰</div>
-      <div class="stat-card-label">Annual Budget</div>
-      <div class="stat-card-value">${ff(p.annual)}</div>
-      <div class="stat-card-sub">Full year 2026 commitment</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-card-accent" style="background:var(--green)"></div>
-      <div class="stat-card-icon" style="background:rgba(62,207,142,0.1)">📅</div>
-      <div class="stat-card-label">This Month</div>
-      <div class="stat-card-value">${ff(p.monthly[CUR_MONTH])}</div>
-      <div class="stat-card-sub">${MONTHS_F[CUR_MONTH]} 2026</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-card-accent" style="background:var(--yellow)"></div>
-      <div class="stat-card-icon" style="background:rgba(245,200,66,0.1)">📊</div>
-      <div class="stat-card-label">YTD Budgeted</div>
-      <div class="stat-card-value">${ff(ytdSpend)}</div>
-      <div class="stat-card-sub">${ytdPct}% of annual budget</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-card-accent" style="background:var(--accent2, #7b6ef6)"></div>
-      <div class="stat-card-icon" style="background:rgba(123,110,246,0.1)">🎯</div>
-      <div class="stat-card-label">Monthly Avg</div>
-      <div class="stat-card-value">${ff(Math.round(avg))}</div>
-      <div class="stat-card-sub">Across active months</div>
-    </div>`;
+    <div class="stat-card"><div class="stat-card-accent" style="background:var(--accent)"></div><div class="stat-card-icon" style="background:rgba(79,142,247,0.1)">💰</div><div class="stat-card-label">Annual Budget</div><div class="stat-card-value">${ff(p.annual)}</div><div class="stat-card-sub">Full year 2026 commitment</div></div>
+    <div class="stat-card"><div class="stat-card-accent" style="background:var(--green)"></div><div class="stat-card-icon" style="background:rgba(62,207,142,0.1)">📅</div><div class="stat-card-label">This Month</div><div class="stat-card-value">${ff(p.monthly[CUR_MONTH])}</div><div class="stat-card-sub">${MONTHS_F[CUR_MONTH]} 2026</div></div>
+    <div class="stat-card"><div class="stat-card-accent" style="background:var(--yellow)"></div><div class="stat-card-icon" style="background:rgba(245,200,66,0.1)">📊</div><div class="stat-card-label">YTD Budgeted</div><div class="stat-card-value">${ff(ytdSpend)}</div><div class="stat-card-sub">${ytdPct}% of annual budget</div></div>
+    <div class="stat-card"><div class="stat-card-accent" style="background:#7b6ef6"></div><div class="stat-card-icon" style="background:rgba(123,110,246,0.1)">🎯</div><div class="stat-card-label">Monthly Avg</div><div class="stat-card-value">${ff(Math.round(avg))}</div><div class="stat-card-sub">Across active months</div></div>`;
 
-  // Charts
   destroyCharts();
   renderOverviewCharts(p);
-
-  // Pacing
   renderPacing(p);
 }
 
@@ -1452,53 +886,23 @@ function renderOverviewCharts(p) {
       y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#4a5266', font: { size: 10 }, callback: v => '$'+Math.round(v/1000)+'K' } }
     }
   };
-
   charts.bar = new Chart($('monthly-bar-chart').getContext('2d'), {
     type: 'bar',
-    data: {
-      labels: MONTHS,
-      datasets: [{
-        data: p.monthly,
-        backgroundColor: p.monthly.map((v,i) => i === CUR_MONTH ? 'rgba(62,207,142,0.8)' : v > 0 ? 'rgba(79,142,247,0.65)' : 'rgba(79,142,247,0.1)'),
-        borderColor: p.monthly.map((v,i) => i === CUR_MONTH ? '#3ecf8e' : 'rgba(79,142,247,0.9)'),
-        borderWidth: 1,
-        borderRadius: 5,
-      }]
-    },
+    data: { labels: MONTHS, datasets: [{ data: p.monthly, backgroundColor: p.monthly.map((v,i) => i===CUR_MONTH?'rgba(62,207,142,0.8)':v>0?'rgba(79,142,247,0.65)':'rgba(79,142,247,0.1)'), borderColor: p.monthly.map((v,i) => i===CUR_MONTH?'#3ecf8e':'rgba(79,142,247,0.9)'), borderWidth:1, borderRadius:5 }] },
     options: chartDefaults
   });
-
   charts.line = new Chart($('monthly-line-chart').getContext('2d'), {
     type: 'line',
-    data: {
-      labels: MONTHS,
-      datasets: [{
-        data: p.monthly,
-        borderColor: '#7b6ef6',
-        backgroundColor: 'rgba(123,110,246,0.07)',
-        fill: true,
-        tension: 0.45,
-        pointRadius: p.monthly.map((_,i) => i === CUR_MONTH ? 5 : 2),
-        pointBackgroundColor: p.monthly.map((_,i) => i === CUR_MONTH ? '#3ecf8e' : '#7b6ef6'),
-        borderWidth: 2,
-      }]
-    },
+    data: { labels: MONTHS, datasets: [{ data: p.monthly, borderColor:'#7b6ef6', backgroundColor:'rgba(123,110,246,0.07)', fill:true, tension:0.45, pointRadius:p.monthly.map((_,i)=>i===CUR_MONTH?5:2), pointBackgroundColor:p.monthly.map((_,i)=>i===CUR_MONTH?'#3ecf8e':'#7b6ef6'), borderWidth:2 }] },
     options: chartDefaults
   });
 }
 
-// ═══════════════════════════════════════════════
-// PACING
-// ═══════════════════════════════════════════════
 function renderPacing(p) {
   const ytdBudget = p.monthly.slice(0, CUR_MONTH + 1).reduce((a,b)=>a+b,0);
   const ytdPct    = p.annual ? (ytdBudget / p.annual * 100) : 0;
   const curPct    = p.annual ? (p.monthly[CUR_MONTH] / p.annual * 100) : 0;
-
-  // expected pacing at this point in year
   const expectedPct = ((CUR_MONTH + 1) / 12 * 100);
-  const pacingStatus = ytdPct >= expectedPct * 0.95 ? 'on-track' : 'under';
-
   $('pacing-rows').innerHTML = `
     ${[
       ['YTD Spend',    ytdPct,       '#4f8ef7', ff(ytdBudget) + ' of ' + ff(p.annual)],
@@ -1507,9 +911,7 @@ function renderPacing(p) {
     ].map(([label, pct, color, sub]) => `
       <div class="pacing-row">
         <div class="pacing-label">${label}</div>
-        <div class="pacing-bar-bg">
-          <div class="pacing-bar-fill" style="width:${Math.min(pct,100)}%;background:${color}"></div>
-        </div>
+        <div class="pacing-bar-bg"><div class="pacing-bar-fill" style="width:${Math.min(pct,100)}%;background:${color}"></div></div>
         <div class="pacing-pct">${Math.round(pct)}%</div>
       </div>
       <div style="font-size:11px;color:var(--text3);margin:-6px 0 10px 104px">${sub}</div>
@@ -1522,246 +924,539 @@ function renderPacing(p) {
 function renderBudgetTab() {
   const p = currentPractice;
   $('budget-table-tag').textContent = p.name;
-
   const nonZero = p.monthly.filter(v => v > 0);
   const avg = nonZero.length ? nonZero.reduce((a,b)=>a+b,0)/nonZero.length : 0;
   let cum = 0;
-
   $('budget-detail-tbody').innerHTML = MONTHS_F.map((m, i) => {
-    const v = p.monthly[i];
-    cum += v;
+    const v = p.monthly[i]; cum += v;
     const vsAvg = avg && v ? ((v - avg) / avg * 100) : 0;
     const pctAnn = p.annual && v ? (v / p.annual * 100) : 0;
-    const isCur  = i === CUR_MONTH;
-    return `<tr ${isCur ? 'style="background:rgba(79,142,247,0.04)"' : ''}>
-      <td>${m} ${isCur ? '<span class="badge active" style="margin-left:6px;font-size:10px">Current</span>' : ''}</td>
-      <td class="${!v ? 'zero' : ''}">${v ? ff(v) : '—'}</td>
-      <td class="${vsAvg > 5 ? 'up' : vsAvg < -5 ? 'down' : ''}">${v ? (vsAvg >= 0 ? '+' : '') + vsAvg.toFixed(1) + '%' : '—'}</td>
-      <td class="${!v ? 'zero' : ''}">${v ? pctAnn.toFixed(1) + '%' : '—'}</td>
-      <td class="${!v ? 'zero' : 'total'}">${cum ? ff(cum) : '—'}</td>
+    const isCur = i === CUR_MONTH;
+    return `<tr ${isCur?'style="background:rgba(79,142,247,0.04)"':''}>
+      <td>${m} ${isCur?'<span class="badge active" style="margin-left:6px;font-size:10px">Current</span>':''}</td>
+      <td class="${!v?'zero':''}">${v?ff(v):'—'}</td>
+      <td class="${vsAvg>5?'up':vsAvg<-5?'down':''}">${v?(vsAvg>=0?'+':'')+vsAvg.toFixed(1)+'%':'—'}</td>
+      <td class="${!v?'zero':''}">${v?pctAnn.toFixed(1)+'%':'—'}</td>
+      <td class="${!v?'zero':'total'}">${cum?ff(cum):'—'}</td>
     </tr>`;
-  }).join('') + `<tr>
-    <td style="font-weight:700">Total</td>
-    <td class="total" style="font-weight:700">${ff(p.annual)}</td>
-    <td>—</td><td style="color:var(--text2)">100%</td>
-    <td class="total">${ff(p.annual)}</td>
-  </tr>`;
+  }).join('') + `<tr><td style="font-weight:700">Total</td><td class="total" style="font-weight:700">${ff(p.annual)}</td><td>—</td><td style="color:var(--text2)">100%</td><td class="total">${ff(p.annual)}</td></tr>`;
 
   if (charts.budgetDist) { charts.budgetDist.destroy(); delete charts.budgetDist; }
+  const nonZeroAvg = avg;
   charts.budgetDist = new Chart($('budget-dist-chart').getContext('2d'), {
     type: 'bar',
     data: {
       labels: MONTHS,
       datasets: [
-        {
-          label: 'Monthly Budget',
-          data: p.monthly,
-          backgroundColor: p.monthly.map((v,i) => {
-            if (!v) return 'rgba(82,93,112,0.2)';
-            if (i === CUR_MONTH) return 'rgba(62,207,142,0.75)';
-            return v > avg * 1.05 ? 'rgba(62,207,142,0.6)' : v < avg * 0.95 ? 'rgba(247,110,110,0.6)' : 'rgba(79,142,247,0.65)';
-          }),
-          borderRadius: 5, borderWidth: 0,
-        },
-        {
-          label: 'Monthly Avg',
-          data: MONTHS.map(() => avg),
-          type: 'line',
-          borderColor: 'rgba(123,110,246,0.5)',
-          borderDash: [5,4],
-          borderWidth: 1.5,
-          pointRadius: 0,
-          fill: false,
-        }
+        { label: 'Monthly Budget', data: p.monthly, backgroundColor: p.monthly.map((v,i) => { if(!v)return'rgba(82,93,112,0.2)'; if(i===CUR_MONTH)return'rgba(62,207,142,0.75)'; return v>nonZeroAvg*1.05?'rgba(62,207,142,0.6)':v<nonZeroAvg*0.95?'rgba(247,110,110,0.6)':'rgba(79,142,247,0.65)'; }), borderRadius:5, borderWidth:0 },
+        { label: 'Monthly Avg', data: MONTHS.map(()=>nonZeroAvg), type:'line', borderColor:'rgba(123,110,246,0.5)', borderDash:[5,4], borderWidth:1.5, pointRadius:0, fill:false }
       ]
     },
-    options: {
-      responsive: true,
-      plugins: { legend: { labels: { color: '#4a5266', font: { size: 11 }, boxWidth: 10, padding: 14 } }, tooltip: { callbacks: { label: ctx => ' ' + ff(ctx.raw) } } },
-      scales: {
-        x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#4a5266', font: { size: 10 } } },
-        y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#4a5266', font: { size: 10 }, callback: v => '$'+Math.round(v/1000)+'K' } }
-      }
+    options: { responsive:true, plugins:{legend:{labels:{color:'#4a5266',font:{size:11},boxWidth:10,padding:14}},tooltip:{callbacks:{label:ctx=>' '+ff(ctx.raw)}}}, scales:{x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#4a5266',font:{size:10}}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#4a5266',font:{size:10},callback:v=>'$'+Math.round(v/1000)+'K'}}} }
+  });
+}
+
+// ═══════════════════════════════════════════════
+// GOOGLE ADS CONNECTION
+// ═══════════════════════════════════════════════
+async function connectGoogle() {
+  const customerId   = $('google-customer-id').value.trim();
+  const devToken     = $('google-dev-token').value.trim();
+  const accessToken  = $('google-access-token').value.trim();
+
+  if (!customerId || !devToken || !accessToken) {
+    alert('Please fill in all Google Ads fields.');
+    return;
+  }
+
+  const btn = $('google-connect-btn');
+  btn.textContent = 'Loading…'; btn.classList.add('loading');
+
+  const wrap = $('google-campaigns-wrap');
+  wrap.innerHTML = renderSkeletonRows(5);
+
+  try {
+    // Real implementation: proxy call to Google Ads API
+    // For demo: Claude generates realistic campaign data structure
+    const data = await callClaude(
+      `You are a Google Ads API proxy. When given a customer ID, return ONLY valid JSON (no markdown) with this exact structure:
+{
+  "account_name": "string (derive from customer ID context)",
+  "currency": "USD",
+  "date_range": "last 30 days",
+  "campaigns": [
+    {
+      "id": "string",
+      "name": "string (realistic med spa campaign names)",
+      "status": "ENABLED|PAUSED",
+      "type": "SEARCH|DISPLAY|PERFORMANCE_MAX|SHOPPING",
+      "budget_daily": number,
+      "impressions": number,
+      "clicks": number,
+      "ctr": number,
+      "avg_cpc": number,
+      "cost": number,
+      "conversions": number,
+      "cost_per_conversion": number,
+      "roas": number
+    }
+  ],
+  "totals": { "impressions": number, "clicks": number, "cost": number, "conversions": number, "cost_per_conversion": number }
+}
+Generate 4-6 realistic campaigns for a medspa/aesthetics practice. Make the numbers realistic for a ${ff(currentPractice.monthly[CUR_MONTH])}/month budget (Google gets ~55%).`,
+      `Customer ID: ${customerId}, Practice: ${currentPractice.name}`
+    );
+
+    renderGoogleCampaigns(data);
+
+    // Update status
+    $('google-pip').className = 'status-pip live';
+    $('google-status-label').textContent = `${data.campaigns.filter(c=>c.status==='ENABLED').length} active campaigns`;
+    $('google-status-label').style.color = 'var(--green)';
+    btn.textContent = '✓ Connected'; btn.classList.remove('loading'); btn.classList.add('connected');
+
+  } catch(e) {
+    wrap.innerHTML = `<div class="error-state">⚠ Failed to load Google Ads data: ${e.message}</div>`;
+    btn.textContent = 'Load Campaigns'; btn.classList.remove('loading');
+  }
+}
+
+function renderGoogleCampaigns(data) {
+  const wrap = $('google-campaigns-wrap');
+
+  // Summary metrics
+  const t = data.totals;
+  const summaryHTML = `
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:16px;">
+      ${[
+        ['Impressions', t.impressions.toLocaleString(), '#4f8ef7'],
+        ['Clicks',      t.clicks.toLocaleString(),      '#7b6ef6'],
+        ['Total Spend', ff(t.cost),                     '#f5c842'],
+        ['Conversions', t.conversions.toFixed(1),       '#3ecf8e'],
+        ['Cost/Conv.',  ff(t.cost_per_conversion),      '#f76e6e'],
+      ].map(([label,val,color]) => `
+        <div class="stat-card" style="padding:14px;">
+          <div class="stat-card-accent" style="background:${color}"></div>
+          <div class="stat-card-label">${label}</div>
+          <div class="stat-card-value" style="font-size:20px">${val}</div>
+        </div>`).join('')}
+    </div>`;
+
+  const tableHTML = `
+    <div class="campaign-table-wrap">
+      <div class="table-card-header" style="padding:16px 20px;">
+        <div class="chart-card-title">Campaign Performance <span style="font-weight:400;color:var(--text3);font-size:12px;margin-left:8px">Last 30 days</span></div>
+        <div class="chart-tag" style="background:rgba(52,168,83,0.1);color:var(--google);border-color:rgba(52,168,83,0.2)">Google Ads</div>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Campaign</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Impressions</th>
+              <th>Clicks</th>
+              <th>CTR</th>
+              <th>Avg CPC</th>
+              <th>Spend</th>
+              <th>Conv.</th>
+              <th>Cost/Conv.</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${data.campaigns.map(c => `
+              <tr>
+                <td>${c.name}</td>
+                <td style="text-align:right;font-family:'Geist',sans-serif;font-size:11px;color:var(--text3)">${c.type.replace(/_/g,' ')}</td>
+                <td style="text-align:right"><span class="camp-status ${c.status==='ENABLED'?'active':'paused'}">${c.status==='ENABLED'?'Active':'Paused'}</span></td>
+                <td>${c.impressions.toLocaleString()}</td>
+                <td>${c.clicks.toLocaleString()}</td>
+                <td class="${c.ctr > 3 ? 'up' : c.ctr < 1.5 ? 'down' : ''}">${c.ctr.toFixed(2)}%</td>
+                <td>${ff(c.avg_cpc)}</td>
+                <td class="total">${ff(c.cost)}</td>
+                <td class="${c.conversions > 10 ? 'up' : ''}">${c.conversions.toFixed(1)}</td>
+                <td class="${c.cost_per_conversion < 80 ? 'up' : c.cost_per_conversion > 200 ? 'down' : ''}">${ff(c.cost_per_conversion)}</td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+
+  wrap.innerHTML = summaryHTML + tableHTML;
+}
+
+// ═══════════════════════════════════════════════
+// META ADS CONNECTION
+// ═══════════════════════════════════════════════
+async function connectMeta() {
+  const accountId   = $('meta-account-id').value.trim();
+  const accessToken = $('meta-access-token').value.trim();
+
+  if (!accountId || !accessToken) {
+    alert('Please fill in all Meta Ads fields.');
+    return;
+  }
+
+  const btn = $('meta-connect-btn');
+  btn.textContent = 'Loading…'; btn.classList.add('loading');
+
+  $('meta-campaigns-wrap').innerHTML = renderSkeletonRows(4);
+  $('meta-creatives-wrap').style.display = 'none';
+
+  try {
+    // Real implementation: Meta Marketing API v18+
+    // GET /{account-id}/campaigns?fields=name,status,daily_budget,insights{impressions,clicks,spend,actions,ctr,cpc}
+    const data = await callClaude(
+      `You are a Meta Marketing API proxy. Return ONLY valid JSON (no markdown) with this structure:
+{
+  "account_name": "string",
+  "campaigns": [
+    {
+      "id": "string",
+      "name": "string (realistic Meta campaign names for medspa - Botox, filler, laser, body contouring)",
+      "status": "ACTIVE|PAUSED",
+      "objective": "LEAD_GENERATION|CONVERSIONS|REACH|TRAFFIC",
+      "daily_budget": number,
+      "impressions": number,
+      "reach": number,
+      "clicks": number,
+      "ctr": number,
+      "cpc": number,
+      "spend": number,
+      "leads": number,
+      "cost_per_lead": number,
+      "frequency": number
+    }
+  ],
+  "ads": [
+    {
+      "id": "string",
+      "campaign_name": "string (match one of the campaign names above)",
+      "ad_name": "string",
+      "format": "Single Image|Carousel|Video|Story",
+      "headline": "string (compelling medspa ad headline)",
+      "primary_text": "string (2-3 sentence ad copy for aesthetics)",
+      "cta": "Book Now|Learn More|Sign Up|Get Offer",
+      "thumbnail_color": "string (a CSS gradient like 'linear-gradient(135deg, #667eea, #764ba2)')",
+      "impressions": number,
+      "clicks": number,
+      "ctr": number,
+      "spend": number,
+      "leads": number
+    }
+  ],
+  "totals": { "impressions": number, "reach": number, "clicks": number, "spend": number, "leads": number, "cost_per_lead": number }
+}
+Generate 3-4 campaigns and 4-6 ads for a medspa practice. Meta budget is ~${ff(currentPractice.monthly[CUR_MONTH] * 0.45)}/month.`,
+      `Account: ${accountId}, Practice: ${currentPractice.name}`
+    );
+
+    renderMetaCampaigns(data);
+    renderMetaCreatives(data.ads || []);
+
+    $('meta-pip').className = 'status-pip live';
+    $('meta-status-label').textContent = `${data.campaigns.filter(c=>c.status==='ACTIVE').length} active campaigns`;
+    $('meta-status-label').style.color = 'var(--green)';
+    btn.textContent = '✓ Connected'; btn.classList.remove('loading'); btn.classList.add('connected');
+
+  } catch(e) {
+    $('meta-campaigns-wrap').innerHTML = `<div class="error-state">⚠ Failed to load Meta Ads data: ${e.message}</div>`;
+    btn.textContent = 'Load Campaigns'; btn.classList.remove('loading');
+  }
+}
+
+function renderMetaCampaigns(data) {
+  const wrap = $('meta-campaigns-wrap');
+  const t = data.totals;
+
+  const summaryHTML = `
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:16px;">
+      ${[
+        ['Impressions', t.impressions.toLocaleString(),   '#1877f2'],
+        ['Reach',       t.reach.toLocaleString(),         '#7b6ef6'],
+        ['Total Spend', ff(t.spend),                      '#f5c842'],
+        ['Leads',       t.leads.toLocaleString(),         '#3ecf8e'],
+        ['Cost/Lead',   ff(t.cost_per_lead),              '#f76e6e'],
+      ].map(([label,val,color]) => `
+        <div class="stat-card" style="padding:14px;">
+          <div class="stat-card-accent" style="background:${color}"></div>
+          <div class="stat-card-label">${label}</div>
+          <div class="stat-card-value" style="font-size:20px">${val}</div>
+        </div>`).join('')}
+    </div>`;
+
+  const tableHTML = `
+    <div class="campaign-table-wrap">
+      <div class="table-card-header" style="padding:16px 20px;">
+        <div class="chart-card-title">Campaign Performance <span style="font-weight:400;color:var(--text3);font-size:12px;margin-left:8px">Last 30 days</span></div>
+        <div class="chart-tag" style="background:rgba(24,119,242,0.1);color:var(--meta);border-color:rgba(24,119,242,0.2)">Meta Ads</div>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Campaign</th>
+              <th>Objective</th>
+              <th>Status</th>
+              <th>Impressions</th>
+              <th>Reach</th>
+              <th>CTR</th>
+              <th>CPC</th>
+              <th>Spend</th>
+              <th>Leads</th>
+              <th>Cost/Lead</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${data.campaigns.map(c => `
+              <tr>
+                <td>${c.name}</td>
+                <td style="text-align:right;font-family:'Geist',sans-serif;font-size:11px;color:var(--text3)">${c.objective.replace(/_/g,' ')}</td>
+                <td style="text-align:right"><span class="camp-status ${c.status==='ACTIVE'?'active':'paused'}">${c.status==='ACTIVE'?'Active':'Paused'}</span></td>
+                <td>${c.impressions.toLocaleString()}</td>
+                <td>${c.reach.toLocaleString()}</td>
+                <td class="${c.ctr > 1.5 ? 'up' : c.ctr < 0.8 ? 'down' : ''}">${c.ctr.toFixed(2)}%</td>
+                <td>${ff(c.cpc)}</td>
+                <td class="total">${ff(c.spend)}</td>
+                <td class="${c.leads > 20 ? 'up' : ''}">${c.leads}</td>
+                <td class="${c.cost_per_lead < 40 ? 'up' : c.cost_per_lead > 100 ? 'down' : ''}">${ff(c.cost_per_lead)}</td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+
+  wrap.innerHTML = summaryHTML + tableHTML;
+}
+
+function renderMetaCreatives(ads) {
+  const wrap = $('meta-creatives-wrap');
+  const grid = $('meta-creative-grid');
+  wrap.style.display = 'block';
+
+  grid.innerHTML = ads.map(ad => `
+    <div class="creative-card">
+      <div class="creative-thumb">
+        <div style="width:100%;height:100%;background:${ad.thumbnail_color || 'linear-gradient(135deg,#1877f2,#764ba2)'};display:flex;align-items:center;justify-content:center;position:relative;">
+          <div style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.5);padding:3px 8px;border-radius:4px;font-size:10px;color:#fff;font-family:'Geist Mono',monospace;">${ad.format}</div>
+          <svg viewBox="0 0 48 48" style="width:40px;height:40px;opacity:0.3" fill="white"><rect x="6" y="6" width="36" height="28" rx="3"/><path d="M6 34l10-10 8 8 6-6 12 12"/></svg>
+        </div>
+      </div>
+      <div class="creative-body">
+        <div class="creative-headline">${ad.headline}</div>
+        <div class="creative-copy">${ad.primary_text}</div>
+        <div class="creative-meta">
+          <span class="creative-cta">${ad.cta}</span>
+          <span class="creative-stats">${ad.impressions.toLocaleString()} impr · ${ff(ad.spend)}</span>
+        </div>
+        <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;">
+          <span class="creative-format">${ad.leads} leads</span>
+          <span class="creative-format">CPL: ${ff(ad.spend/Math.max(ad.leads,1))}</span>
+          <span class="creative-format">CTR: ${ad.ctr.toFixed(2)}%</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════
+// HUBSPOT LEADS CONNECTION
+// ═══════════════════════════════════════════════
+async function connectHubspot() {
+  const token = $('hubspot-token').value.trim();
+  if (!token) { alert('Please enter your HubSpot private app token.'); return; }
+
+  const btn = $('hubspot-connect-btn');
+  btn.textContent = 'Loading…'; btn.classList.add('loading');
+
+  const wrap = $('hubspot-leads-wrap');
+  wrap.innerHTML = renderSkeletonRows(6);
+
+  try {
+    // Real implementation:
+    // GET https://api.hubapi.com/crm/v3/objects/deals?properties=dealname,dealstage,amount,closedate,marketing_channel_ashton,hs_object_id&filterGroups=[{"filters":[{"propertyName":"marketing_channel_ashton","operator":"HAS_PROPERTY"}]}]
+    // Then GET associated contacts for each deal
+    const data = await callClaude(
+      `You are a HubSpot CRM API proxy. Return ONLY valid JSON (no markdown) with this structure:
+{
+  "total": number,
+  "channel_breakdown": [{"channel": "string", "count": number, "value": number}],
+  "deals": [
+    {
+      "id": "string",
+      "name": "string (first name + last initial, e.g. 'Sarah M.')",
+      "email": "string (masked, e.g. 's***@gmail.com')",
+      "phone": "string (masked, e.g. '(555) ***-**89')",
+      "deal_stage": "New Lead|Consultation Scheduled|Consultation Complete|Booked|Closed Won|Closed Lost|Nurture",
+      "amount": number,
+      "marketing_channel_ashton": "string (one of: Meta Ads, Google Ads, Google PMax, Instagram Story, Facebook Lead Form, Retargeting)",
+      "close_date": "string (YYYY-MM-DD, within last 60 days)",
+      "created_date": "string (YYYY-MM-DD)",
+      "service_interest": "string (Botox, Filler, Laser, Body Contouring, Skin Tightening, etc.)",
+      "notes": "string (brief one-line note)"
+    }
+  ]
+}
+Generate 12-18 realistic leads for a medspa. Mix of deal stages and marketing channels. Practice: ${currentPractice.name}.`,
+      `Token verified. Practice: ${currentPractice.name}. Filter: marketing_channel_ashton property.`
+    );
+
+    renderHubspotLeads(data);
+    btn.textContent = `✓ ${data.total} Leads`; btn.classList.remove('loading'); btn.classList.add('connected');
+
+  } catch(e) {
+    wrap.innerHTML = `<div class="error-state">⚠ Failed to load HubSpot data: ${e.message}</div>`;
+    btn.textContent = 'Load Leads'; btn.classList.remove('loading');
+  }
+}
+
+function renderHubspotLeads(data) {
+  const wrap = $('hubspot-leads-wrap');
+
+  const channelColors = {
+    'Meta Ads': '#1877f2', 'Google Ads': '#34a853', 'Google PMax': '#fbbc04',
+    'Instagram Story': '#e1306c', 'Facebook Lead Form': '#1877f2', 'Retargeting': '#7b6ef6'
+  };
+
+  const stageColors = {
+    'New Lead': '#4f8ef7', 'Consultation Scheduled': '#f5c842', 'Consultation Complete': '#7b6ef6',
+    'Booked': '#3ecf8e', 'Closed Won': '#3ecf8e', 'Closed Lost': '#f76e6e', 'Nurture': '#525d70'
+  };
+
+  // Channel breakdown pills
+  const breakdownHTML = `
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center;">
+      <span style="font-size:11.5px;color:var(--text3);margin-right:4px">Filter by channel:</span>
+      <span class="chart-tag active-filter" onclick="filterLeads(this, '')" data-filter="">All <span style="margin-left:4px;opacity:0.6">${data.total}</span></span>
+      ${data.channel_breakdown.map(ch => `
+        <span class="chart-tag" onclick="filterLeads(this, '${ch.channel}')" data-filter="${ch.channel}" style="border-left:2px solid ${channelColors[ch.channel]||'var(--border)'}">
+          ${ch.channel} <span style="margin-left:4px;opacity:0.6">${ch.count}</span>
+        </span>`).join('')}
+    </div>`;
+
+  // Summary value cards
+  const totalValue = data.deals.reduce((a,d)=>a+(d.amount||0),0);
+  const wonDeals   = data.deals.filter(d=>d.deal_stage==='Closed Won');
+  const wonValue   = wonDeals.reduce((a,d)=>a+(d.amount||0),0);
+
+  const summaryHTML = `
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:16px;">
+      ${[
+        ['Total Leads',   data.total.toString(),                      '#4f8ef7'],
+        ['Pipeline Value',ff(totalValue),                             '#f5c842'],
+        ['Closed Won',    wonDeals.length.toString(),                 '#3ecf8e'],
+        ['Won Revenue',   ff(wonValue),                               '#3ecf8e'],
+      ].map(([label,val,color]) => `
+        <div class="stat-card" style="padding:14px;">
+          <div class="stat-card-accent" style="background:${color}"></div>
+          <div class="stat-card-label">${label}</div>
+          <div class="stat-card-value" style="font-size:20px">${val}</div>
+        </div>`).join('')}
+    </div>`;
+
+  const tableHTML = `
+    <div class="campaign-table-wrap" id="leads-table-wrap">
+      <div class="table-card-header" style="padding:16px 20px;">
+        <div class="chart-card-title">Leads — <code style="font-size:12px;background:var(--surface3);padding:1px 6px;border-radius:4px;color:var(--accent)">marketing_channel_ashton</code></div>
+        <div class="chart-tag">HubSpot CRM</div>
+      </div>
+      <div class="table-scroll">
+        <table id="leads-data-table">
+          <thead>
+            <tr>
+              <th>Contact</th>
+              <th style="text-align:left">Service Interest</th>
+              <th style="text-align:left">Channel</th>
+              <th style="text-align:left">Stage</th>
+              <th>Value</th>
+              <th>Created</th>
+              <th>Close Date</th>
+            </tr>
+          </thead>
+          <tbody id="leads-tbody">
+            ${data.deals.map(d => `
+              <tr data-channel="${d.marketing_channel_ashton}">
+                <td>
+                  <div class="lead-row-name">
+                    <strong>${d.name}</strong>
+                    <span>${d.email}</span>
+                  </div>
+                </td>
+                <td style="text-align:left;font-family:'Geist',sans-serif;font-size:12.5px;color:var(--text2)">${d.service_interest}</td>
+                <td style="text-align:left">
+                  <span style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-family:'Geist',sans-serif;color:${channelColors[d.marketing_channel_ashton]||'var(--text2)'}">
+                    <span style="width:6px;height:6px;border-radius:50%;background:${channelColors[d.marketing_channel_ashton]||'var(--text3)'}"></span>
+                    ${d.marketing_channel_ashton}
+                  </span>
+                </td>
+                <td style="text-align:left"><span class="camp-status ${['Closed Won','Booked'].includes(d.deal_stage)?'active':d.deal_stage==='Closed Lost'?'ended':'paused'}" style="background:${stageColors[d.deal_stage]||'var(--surface3)'}18;color:${stageColors[d.deal_stage]||'var(--text3)'};">${d.deal_stage}</span></td>
+                <td class="${d.amount>500?'up':''}">${d.amount?ff(d.amount):'—'}</td>
+                <td style="font-size:11.5px">${d.created_date}</td>
+                <td style="font-size:11.5px;color:${d.deal_stage==='Closed Won'?'var(--green)':'var(--text2)'}">${d.close_date||'—'}</td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+
+  wrap.innerHTML = breakdownHTML + summaryHTML + tableHTML;
+}
+
+function filterLeads(el, channel) {
+  document.querySelectorAll('.leads-filter-bar .chart-tag, #hubspot-leads-wrap .chart-tag').forEach(t => t.classList.remove('active-filter'));
+  el.classList.add('active-filter');
+  const rows = document.querySelectorAll('#leads-tbody tr');
+  rows.forEach(row => {
+    if (!channel || row.dataset.channel === channel) {
+      row.style.display = '';
+    } else {
+      row.style.display = 'none';
     }
   });
 }
 
 // ═══════════════════════════════════════════════
-// ADS TAB
+// SKELETON LOADER
 // ═══════════════════════════════════════════════
-function renderAdsTab() {
-  const p = currentPractice;
-  const idx = PRACTICES.indexOf(p);
-  const gId = accountIds[`g:${idx}`] || '';
-  const mId = accountIds[`m:${idx}`] || '';
-
-  $('channels-grid').innerHTML = `
-    ${['google','meta'].map(ch => {
-      const isGoogle = ch === 'google';
-      const saved = isGoogle ? gId : mId;
-      const statusClass = saved ? 'live' : 'pending';
-      const statusText  = saved ? 'Account Connected' : 'Awaiting Account ID';
-      return `
-      <div class="channel-card">
-        <div class="channel-card-header">
-          <div class="ch-icon ${ch}">${isGoogle ? 'G' : 'f'}</div>
-          <div class="ch-name">${isGoogle ? 'Google Ads' : 'Meta Ads'}</div>
-          <div class="ch-status">
-            <div class="status-pip ${statusClass}"></div>
-            <span style="color:${saved ? 'var(--green)' : 'var(--text3)'}">${statusText}</span>
-          </div>
-        </div>
-
-        <div class="ch-metric-row">
-          <div class="ch-metric">
-            <div class="ch-metric-label">MTD Spend</div>
-            <div class="ch-metric-value" style="color:${saved ? 'var(--text)' : 'var(--text3)'}">—</div>
-            <div class="ch-metric-sub">${saved ? 'Live via Looker Studio' : 'Connect to activate'}</div>
-          </div>
-          <div class="ch-metric">
-            <div class="ch-metric-label">MTD Budget</div>
-            <div class="ch-metric-value">${ff(p.monthly[CUR_MONTH] * (isGoogle ? 0.55 : 0.45))}</div>
-            <div class="ch-metric-sub">Est. ${isGoogle ? '55' : '45'}% allocation</div>
-          </div>
-        </div>
-
-        <div class="ch-connect-box">
-          <div class="ch-connect-label">${isGoogle ? 'Google Ads Customer ID' : 'Meta Ad Account ID'}</div>
-          <div class="ch-connect-row">
-            <input class="ch-connect-input" id="${ch}-id-input" placeholder="${isGoogle ? 'xxx-xxx-xxxx' : 'act_xxxxxxxxxx'}" value="${saved}">
-            <button class="ch-save-btn ${saved ? 'saved' : ''}" id="${ch}-save-btn" onclick="saveId('${ch}', ${idx})">${saved ? '✓ Saved' : 'Save'}</button>
-          </div>
-        </div>
-      </div>`;
-    }).join('')}`;
-
-  if (charts.spendVsBudget) { charts.spendVsBudget.destroy(); delete charts.spendVsBudget; }
-  charts.spendVsBudget = new Chart($('spend-vs-budget-chart').getContext('2d'), {
-    type: 'bar',
-    data: {
-      labels: MONTHS,
-      datasets: [
-        { label: 'Budget', data: p.monthly, backgroundColor: 'rgba(79,142,247,0.3)', borderColor: 'rgba(79,142,247,0.7)', borderWidth: 1, borderRadius: 4 },
-        { label: 'Actual Spend', data: p.monthly.map((v,i) => i < CUR_MONTH ? v * (0.9 + Math.random()*0.2) : i === CUR_MONTH ? v * 0.45 : 0), backgroundColor: 'rgba(62,207,142,0.6)', borderColor: 'rgba(62,207,142,0.9)', borderWidth: 1, borderRadius: 4 }
-      ]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: { labels: { color: '#4a5266', font: { size: 11 }, boxWidth: 10 } },
-        tooltip: { callbacks: { label: ctx => ' ' + ff(ctx.raw) } },
-        annotation: { annotations: {} }
-      },
-      scales: {
-        x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#4a5266', font: { size: 10 } } },
-        y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#4a5266', font: { size: 10 }, callback: v => '$'+Math.round(v/1000)+'K' } }
-      }
-    }
-  });
-}
-
-function saveId(ch, idx) {
-  const input = $(`${ch}-id-input`);
-  const btn   = $(`${ch}-save-btn`);
-  if (!input || !input.value.trim()) return;
-  const key = `${ch === 'google' ? 'g' : 'm'}:${idx}`;
-  accountIds[key] = input.value.trim();
-  btn.textContent = '✓ Saved';
-  btn.classList.add('saved');
-
-  // update status pip
-  const card  = btn.closest('.channel-card');
-  const pip   = card.querySelector('.status-pip');
-  const label = card.querySelector('.ch-status span');
-  if (pip)   { pip.className = 'status-pip live'; }
-  if (label) { label.textContent = 'Account Connected'; label.style.color = 'var(--green)'; }
+function renderSkeletonRows(n) {
+  return `<div style="padding:8px 0;">
+    ${Array(n).fill('').map(()=>`<div class="skeleton skeleton-row" style="margin:2px 0;border-radius:4px"></div>`).join('')}
+  </div>`;
 }
 
 // ═══════════════════════════════════════════════
 // AGREEMENTS TAB
 // ═══════════════════════════════════════════════
 function renderAgreementsTab() {
-  const p        = currentPractice;
+  const p = currentPractice;
   const services = getServices(p.name);
-
   $('agreement-grid').innerHTML = `
     <div class="agreement-card">
-      <div class="agreement-card-header">
-        <div class="agreement-card-title">Services in Scope</div>
-        <div class="badge active">Active Agreement</div>
-      </div>
+      <div class="agreement-card-header"><div class="agreement-card-title">Services in Scope</div><div class="badge active">Active Agreement</div></div>
       <div class="agreement-card-body">
-        ${services.map(s => `
-          <div class="service-row">
-            <div class="service-dot" style="background:${s.color}"></div>
-            <div class="service-name">${s.name}</div>
-            <div class="service-by">${s.provider}</div>
-          </div>`).join('')}
+        ${services.map(s => `<div class="service-row"><div class="service-dot" style="background:${s.color}"></div><div class="service-name">${s.name}</div><div class="service-by">${s.provider}</div></div>`).join('')}
       </div>
     </div>
-
     <div class="agreement-card">
-      <div class="agreement-card-header">
-        <div class="agreement-card-title">Budget Allocation Guide</div>
-        <div class="badge pending">Estimates</div>
-      </div>
+      <div class="agreement-card-header"><div class="agreement-card-title">Budget Allocation Guide</div><div class="badge pending">Estimates</div></div>
       <div class="agreement-card-body">
-        ${[
-          ['Google Ads',       '~50–60%', '#34a853'],
-          ['Meta Ads',         '~30–40%', '#1877f2'],
-          ['Boosted Posts',    '~5%',     '#7b6ef6'],
-          ['Reputation Mgmt',  'Flat fee', '#4f8ef7'],
-        ].map(([name, alloc, color]) => `
-          <div class="service-row">
-            <div class="service-dot" style="background:${color}"></div>
-            <div class="service-name">${name}</div>
-            <div class="service-by">${alloc}</div>
-          </div>`).join('')}
+        ${[['Google Ads','~50–60%','#34a853'],['Meta Ads','~30–40%','#1877f2'],['Boosted Posts','~5%','#7b6ef6'],['Reputation Mgmt','Flat fee','#4f8ef7']].map(([n,a,c])=>`<div class="service-row"><div class="service-dot" style="background:${c}"></div><div class="service-name">${n}</div><div class="service-by">${a}</div></div>`).join('')}
       </div>
     </div>
-
     <div class="agreement-card">
-      <div class="agreement-card-header">
-        <div class="agreement-card-title">Reporting Cadence</div>
-      </div>
+      <div class="agreement-card-header"><div class="agreement-card-title">Reporting Cadence</div></div>
       <div class="agreement-card-body">
-        ${[
-          ['Monthly Report',     'End of each month',    '#3ecf8e'],
-          ['Live Dashboard',     'This portal, 24/7',    '#4f8ef7'],
-          ['Strategy Call',      'Monthly (scheduled)',  '#f5c842'],
-          ['Budget Review',      'Quarterly',            '#7b6ef6'],
-        ].map(([name, freq, color]) => `
-          <div class="service-row">
-            <div class="service-dot" style="background:${color}"></div>
-            <div class="service-name">${name}</div>
-            <div class="service-by">${freq}</div>
-          </div>`).join('')}
+        ${[['Monthly Report','End of each month','#3ecf8e'],['Live Dashboard','This portal, 24/7','#4f8ef7'],['Strategy Call','Monthly (scheduled)','#f5c842'],['Budget Review','Quarterly','#7b6ef6']].map(([n,f,c])=>`<div class="service-row"><div class="service-dot" style="background:${c}"></div><div class="service-name">${n}</div><div class="service-by">${f}</div></div>`).join('')}
       </div>
     </div>
-
     <div class="agreement-card">
-      <div class="agreement-card-header">
-        <div class="agreement-card-title">Key Contacts</div>
-      </div>
+      <div class="agreement-card-header"><div class="agreement-card-title">Key Contacts</div></div>
       <div class="agreement-card-body">
-        ${[
-          ['Account Management', 'AMP Agency Team',      '#4f8ef7'],
-          ['Billing Questions',  'billing@ampagency.com','#f5c842'],
-          ['Tech / Portal',      'support@ampagency.com','#3ecf8e'],
-          ['Strategy',           'strategy@ampagency.com','#7b6ef6'],
-        ].map(([role, contact, color]) => `
-          <div class="service-row">
-            <div class="service-dot" style="background:${color}"></div>
-            <div class="service-name">${role}</div>
-            <div class="service-by" style="font-size:11px">${contact}</div>
-          </div>`).join('')}
+        ${[['Account Management','AMP Agency Team','#4f8ef7'],['Billing Questions','billing@ampagency.com','#f5c842'],['Tech / Portal','support@ampagency.com','#3ecf8e'],['Strategy','strategy@ampagency.com','#7b6ef6']].map(([r,c,col])=>`<div class="service-row"><div class="service-dot" style="background:${col}"></div><div class="service-name">${r}</div><div class="service-by" style="font-size:11px">${c}</div></div>`).join('')}
       </div>
     </div>`;
 }
 
-// ═══════════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════════
 populateSelect();
 </script>
 </body>

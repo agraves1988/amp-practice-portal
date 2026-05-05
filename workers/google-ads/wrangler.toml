@@ -1,0 +1,10 @@
+name = "amp-google-ads-proxy"
+main = "index.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+ALLOWED_ORIGIN = "https://ampagency.github.io"
+
+# Set these as secrets — never put real values here:
+# npx wrangler secret put GOOGLE_DEVELOPER_TOKEN
+# npx wrangler secret put ALLOWED_ORIGIN  (override for prod)

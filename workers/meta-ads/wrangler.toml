@@ -1,0 +1,11 @@
+name = "amp-meta-ads-proxy"
+main = "index.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+ALLOWED_ORIGIN = "https://ampagency.github.io"
+
+# Set these as secrets:
+# npx wrangler secret put META_APP_ID
+# npx wrangler secret put META_APP_SECRET
+# npx wrangler secret put ALLOWED_ORIGIN
