@@ -563,7 +563,7 @@ footer { border-top: 1px solid var(--border); padding: 20px 32px; display: flex;
 
     <!-- ── LEADS TAB ── -->
     <div class="tab-content" id="tab-leads">
-      <div id="leads-root"></div>
+      <div id="leads-reports-root"></div>
     </div>
 
     <!-- ── AGREEMENTS TAB ── -->
@@ -617,7 +617,7 @@ const PRACTICES = [
   {name:"Avelure - O'Fallon",                  annual:75318,   monthly:[0,2814,2814,3255,3813,4524,5431,6591,8078,9984,12433,15581]},
   {name:"Avelure - Ocala",                     annual:92103,   monthly:[0,4889,4889,5369,5940,6624,7446,8436,9632,11079,12834,14965]},
   {name:"Avelure - Rochester",                 annual:106081,  monthly:[0,7166,7166,7624,8127,8680,9289,9960,10701,11519,12424,13425]},
-  {name:"Avelure - Rochester Hills",           annual:97313,   monthly:[0,5506,5506,5980,6540,7204,7996,8941,10074,11436,13076,15054]},
+
   {name:"Avelure - Sunset Hills",              annual:77786,   monthly:[0,4858,4858,5216,5624,6090,6626,7242,7952,8773,9723,10824]},
   {name:"Avelure - Waterford",                 annual:84650,   monthly:[0,4015,4015,4453,4994,5666,6507,7560,8885,10555,12665,15335]},
   {name:"Avelure - Westport",                  annual:0,       monthly:[0,0,0,0,0,0,0,0,0,0,0,0]},
@@ -1251,230 +1251,79 @@ function renderMetaCreatives(ads) {
 // ═══════════════════════════════════════════════
 
 // Real HubSpot deal stage ID → label map from your account
-// ── CHANNEL COLORS ─────────────────────────────
-const HS_CHANNEL_COLORS = {
-  'Google':               '#34a853',
-  'Meta':                 '#1877f2',
-  'Direct':               '#f5c842',
-  'Website':              '#7b6ef6',
-  'Friend':               '#3ecf8e',
-  'Organic Social':       '#e1306c',
-  'Organic Google':       '#0ea5e9',
-  'Other PPC':            '#f76e6e',
-  'Google Business Profile': '#fbbc04',
-  'Events':               '#a855f7',
+// ═══════════════════════════════════════════════
+// HUBSPOT REPORT EMBEDS
+// Add reports here as you create them in HubSpot.
+// Key = practice name (must match PRACTICES array exactly)
+// Each practice can have multiple reports.
+// ═══════════════════════════════════════════════
+const HS_REPORTS = {
+
+  // ── AVELURE ──
+  'Avelure - Buffalo':        [ { title: 'Booked Leads — Buffalo, NY',      url: 'https://app-na2.hubspot.com/reports-list/243076641/274103752/' } ],
+  'Avelure - Creve Coeur':    [ { title: 'Booked Leads — Creve Coeur, MO',  url: 'https://app-na2.hubspot.com/reports-list/243076641/274104353/' } ],
+  'Avelure - Grand Rapids':   [ { title: 'Booked Leads — Grand Rapids, MI', url: 'https://app-na2.hubspot.com/reports-list/243076641/274104386/' } ],
+  'Avelure - Greenwood':      [ { title: 'Booked Leads — Greenwood, IN',    url: 'https://app-na2.hubspot.com/reports-list/243076641/274104503/' } ],
+  'Avelure - Indy':           [ { title: 'Booked Leads — Indianapolis, IN', url: 'https://app-na2.hubspot.com/reports-list/243076641/274104554/' } ],
+  'Avelure - Novi':           [ { title: 'Booked Leads — Novi, MI',         url: 'https://app-na2.hubspot.com/reports-list/243076641/274104646/' } ],
+  "Avelure - O'Fallon":       [ { title: "Booked Leads — O'Fallon, MO",     url: 'https://app-na2.hubspot.com/reports-list/243076641/274104694/' } ],
+  'Avelure - Ocala':          [ { title: 'Booked Leads — Ocala, FL',        url: 'https://app-na2.hubspot.com/reports-list/243076641/274104738/' } ],
+  'Avelure - Rochester':      [ { title: 'Booked Leads — Rochester, NY',    url: 'https://app-na2.hubspot.com/reports-list/243076641/274104787/' } ],
+
+  'Avelure - Sunset Hills':   [ { title: 'Booked Leads — Sunset Hills, MO', url: 'https://app-na2.hubspot.com/reports-list/243076641/274104832/' } ],
+  'Avelure - Waterford':      [ { title: 'Booked Leads — Waterford, FL',    url: 'https://app-na2.hubspot.com/reports-list/243076641/274105042/' } ],
+  'Avelure - Zona Rosa':      [ { title: 'Booked Leads — Zona Rosa, MO',    url: 'https://app-na2.hubspot.com/reports-list/243076641/274105080/' } ],
+
+  // ── ADD MORE BRANDS BELOW AS YOU CREATE REPORTS ──
+  // 'Ever/Body - Flatiron': [
+  //   { title: 'Booked Leads',     url: 'https://app-na2.hubspot.com/reports-list/...' },
+  //   { title: 'Leads by Channel', url: 'https://app-na2.hubspot.com/reports-list/...' },
+  // ],
 };
 
-// ── LEAD SOURCE PARSER ─────────────────────────
-// "Google Ads - form || Ever/Body - Logan Circle, D.C."
-// → { brand: "Ever/Body", location: "Logan Circle, D.C." }
-function parseLeadSource(lead_source) {
-  if (!lead_source) return { brand: '—', location: '—' };
-  const parts = lead_source.split('||');
-  if (parts.length < 2) return { brand: lead_source.trim(), location: '—' };
-  const right = parts[parts.length - 1].trim();
-  const dashIdx = right.indexOf(' - ');
-  if (dashIdx === -1) return { brand: right, location: '—' };
-  return {
-    brand:    right.substring(0, dashIdx).trim(),
-    location: right.substring(dashIdx + 3).trim(),
-  };
-}
-
-// ── REAL HUBSPOT DATA — pulled live 2026-05-05 ──
-// 20,365 total deals with marketing_channel_ashton set
-// Booked = dealstage 'appointmentscheduled'
-// brand + location parsed from lead_source via parseLeadSource()
-const HS_LIVE_DATA = {
-  total: 20365,
-  booked_total: 4367,
-  channel_breakdown: [
-    { channel: 'Meta',                    count: 9036 },
-    { channel: 'Google',                  count: 5127 },
-    { channel: 'Website',                 count: 3200 },
-    { channel: 'Direct',                  count: 1100 },
-    { channel: 'Organic Google',          count:  500 },
-    { channel: 'Google Business Profile', count:  400 },
-    { channel: 'Friend',                  count:  400 },
-    { channel: 'Organic Social',          count:  300 },
-    { channel: 'Other PPC',               count:  200 },
-    { channel: 'Events',                  count:  100 },
-  ],
-  // All leads — booked = true means dealstage appointmentscheduled
-  deals: [
-    { id:'323998992110', name:'Aaron Azpiazu',              booked:false, channel:'Google',  lead_source:'Google Ads - Consultations form || Ever/Body - Logan Circle, D.C.',             created:'2026-05-05' },
-    { id:'323971268319', name:'Alexia',                     booked:false, channel:'Meta',    lead_source:'DA New Patient Form 100ENC-Higher Intent-3-26 || Sacramento',                   created:'2026-05-05' },
-    { id:'323928414967', name:'Yley Allen',                 booked:false, channel:'Meta',    lead_source:'H-MD - Luxe Event - Spring || H-MD - Gaillardia',                               created:'2026-05-05' },
-    { id:'323969011391', name:'Beverly Tanner',             booked:false, channel:'Website', lead_source:'Direct -  WebForm || Avelure Med Spa - Greenwood, IN',                          created:'2026-05-05' },
-    { id:'323998660292', name:'Laura Morgan',               booked:false, channel:'Meta',    lead_source:'H-MD - Luxe Event - Spring || H-MD - Tulsa',                                    created:'2026-05-05' },
-    { id:'324003660506', name:'Lissette',                   booked:false, channel:'Meta',    lead_source:'Avelure - Grand Opening RSVP ROCHESTER ONLY - 4-26 || Avelure Med Spa - Rochester, NY', created:'2026-05-05' },
-    { id:'324003613373', name:'Matt & Jessica Vinyard',     booked:false, channel:'Meta',    lead_source:'H-MD - Luxe Event - Spring || H-MD - Chisholm Creek - Oklahoma City, OK',      created:'2026-05-05' },
-    { id:'323990745795', name:'Eva Aranda',                 booked:false, channel:'Meta',    lead_source:'H-MD - Luxe Event - Spring || H-MD - Gaillardia',                               created:'2026-05-05' },
-    { id:'323994939080', name:'Brooke Winfield',            booked:false, channel:'Google',  lead_source:'Google Ads - Lasers & Skin Tightening form || Ever/Body - Flatiron, NY',        created:'2026-05-05' },
-    { id:'323976610518', name:'Samantha Wilson',            booked:false, channel:'Meta',    lead_source:'Facebook Ads - Injectable Wrinkle Relaxers form || Living Young - Palm Harbor, FL', created:'2026-05-05' },
-    { id:'324001712887', name:'Lisset Manzano',             booked:false, channel:'Website', lead_source:'Direct -  WebForm || H-MD - Gaillardia',                                        created:'2026-05-05' },
-    { id:'323992542953', name:'Marion Andresen Cates',      booked:false, channel:'Meta',    lead_source:'H-MD - Luxe Event - Spring || H-MD - Chisholm Creek - Oklahoma City, OK',      created:'2026-05-05' },
-    { id:'323988894414', name:'Jay Fuller',                 booked:false, channel:'Meta',    lead_source:'Avelure - Grand Opening RSVP KANSAS CITY ONLY - 4-26 || Avelure Med Spa - Zona Rosa, MO', created:'2026-05-05' },
-    { id:'323958596311', name:'Tooba',                      booked:false, channel:'Meta',    lead_source:'DA New Patient Form 100ENC-Higher Intent-3-26 || Sacramento',                   created:'2026-05-05' },
-    { id:'323826555636', name:'Richard Emas',               booked:false, channel:'Meta',    lead_source:'Avelure - Grand Opening RSVP SUNSET HILLS ONLY - 4-26 || Avelure Med Spa - Sunset Hills, MO', created:'2026-05-05' },
-    { id:'323998584562', name:'Samantha Williams',          booked:false, channel:'Meta',    lead_source:'H-MD - Luxe Event - Spring || H-MD - Gaillardia',                               created:'2026-05-05' },
-    { id:'323996728018', name:'Margaret Layton Maguire',    booked:false, channel:'Meta',    lead_source:'Facebook Ads - Injectable Wrinkle Relaxers form || Living Young - St. Petersburg, FL', created:'2026-05-05' },
-    { id:'323974879936', name:'Subha Patel',                booked:false, channel:'Google',  lead_source:'Direct -  WebForm || Destination Aesthetics - Elk Grove, CA',                  created:'2026-05-05' },
-    { id:'323960367841', name:'Amy Jones',                  booked:false, channel:'Meta',    lead_source:'H-MD - Luxe Event - Spring || H-MD - Chisholm Creek - Oklahoma City, OK',      created:'2026-05-05' },
-    { id:'323976591080', name:'Judy Belanger',              booked:false, channel:'Website', lead_source:'Direct -  WebForm || Avelure Med Spa - Creve Coeur, MO',                        created:'2026-05-05' },
-    { id:'323981326042', name:'Judith Belanger',            booked:false, channel:'Meta',    lead_source:'Avelure - Grand Opening RSVP SUNSET HILLS ONLY - 4-26 || Avelure Med Spa - Sunset Hills, MO', created:'2026-05-05' },
-    { id:'323996719852', name:'Shelli Thompson',            booked:false, channel:'Website', lead_source:'Direct -  WebForm || Avelure Med Spa - Zona Rosa, MO',                          created:'2026-05-05' },
-    { id:'323974869752', name:'Jessica',                    booked:false, channel:'Meta',    lead_source:'H-MD - Luxe Event - Spring || H-MD - Gaillardia',                               created:'2026-05-05' },
-    { id:'323994917605', name:'Shannon Rose',               booked:false, channel:'Website', lead_source:'Direct -  WebForm || Avelure Med Spa - Rochester, NY',                          created:'2026-05-05' },
-    { id:'324003572425', name:'Ali Kucsera',                booked:false, channel:'Website', lead_source:'Direct -  WebForm || H-MD - Tulsa, OK',                                         created:'2026-05-05' },
-    { id:'323974866619', name:'Nari Mousa',                 booked:false, channel:'Website', lead_source:'Direct - Destination Aesthetics - Contact Us WebForm || Destination Aesthetics - Folsom, CA', created:'2026-05-05' },
-    { id:'323994731206', name:'Tonya Tankersley',           booked:false, channel:'Google',  lead_source:'Direct -  WebForm || Destination Aesthetics - Elk Grove, CA',                  created:'2026-05-05' },
-    { id:'323971223253', name:'Sarah Hermesman',            booked:false, channel:'Website', lead_source:'Direct -  WebForm || Avelure Med Spa - Waterford, FL',                          created:'2026-05-05' },
-    { id:'323998520054', name:'Linda Ma',                   booked:false, channel:'Meta',    lead_source:'H-MD - Luxe Event - Spring || H-MD - Gaillardia',                               created:'2026-05-05' },
-    { id:'323990713032', name:'Rita Anderson',              booked:false, channel:'Meta',    lead_source:'H-MD - Luxe Event - Spring || H-MD - Chisholm Creek - Oklahoma City, OK',      created:'2026-05-05' },
-    // BOOKED
-    { id:'323976579796', name:'Anna Belle Peevey',          booked:true,  channel:'Google',  lead_source:'Google Ads - Injectable Wrinkle Relaxers form || Ever/Body - Greenwich Village, NY', created:'2026-05-05' },
-    { id:'323971220215', name:'Andrea Laguardia',           booked:true,  channel:'Website', lead_source:'Direct - New Radiance Contact Us WebForm || New Radiance - Palm Beach Gardens, FL', created:'2026-05-05' },
-    { id:'323976575693', name:'Terri Tuazon',               booked:true,  channel:'Website', lead_source:'Direct - Other form || Blush Med Spa - Orange, CT',                             created:'2026-05-05' },
-    { id:'323994840764', name:'Carrie Quinn',               booked:true,  channel:'Google',  lead_source:'Google Ads - Consultations form || Blush Med Spa - Enfield, CT',                created:'2026-05-05' },
-    { id:'323994768102', name:'Kemyatta Rodgers',           booked:true,  channel:'Google',  lead_source:'Google Ads - Injectable Wrinkle Relaxers form || Ever/Body - Flatiron, NY',     created:'2026-05-05' },
-    { id:'323994712796', name:'Tribecca',                   booked:true,  channel:'Meta',    lead_source:'Facebook Ads - Consultations form || Living Young - Odessa, TX',                created:'2026-05-05' },
-    { id:'323973002944', name:'Maryyum Riaz',               booked:true,  channel:'Website', lead_source:'Direct - Destination Aesthetics - Contact Us WebForm || Destination Aesthetics - Roseville, CA', created:'2026-05-05' },
-    { id:'323822315241', name:'Linda Lindenauer',           booked:true,  channel:'Google',  lead_source:'Google Ads - Consultations form || New Radiance - Palm Beach Gardens, FL',      created:'2026-05-05' },
-    { id:'323984839383', name:'Laura Ford',                 booked:true,  channel:'Website', lead_source:'Direct - Destination Aesthetics - Contact Us WebForm || Destination Aesthetics - El Dorado Hills, CA', created:'2026-05-05' },
-    { id:'323518445281', name:'Christie Prather',           booked:true,  channel:'Google',  lead_source:'Google Ads - Consultations form || New Radiance - Wellington, FL',              created:'2026-05-05' },
-  ]
-};
-
-// ── LEADS RENDER ───────────────────────────────
+// ── LEADS TAB RENDER ───────────────────────────
 function loadHubspotLeads() {
-  const root = $('leads-root');
-  const data = HS_LIVE_DATA;
+  const root     = $('leads-reports-root');
+  const practice = currentPractice.name;
+  const reports  = HS_REPORTS[practice];
 
-  // Enrich each deal with parsed brand + location
-  const enriched = data.deals.map(d => ({
-    ...d,
-    ...parseLeadSource(d.lead_source)
-  }));
-
-  const leads  = enriched.filter(d => !d.booked);
-  const booked = enriched.filter(d =>  d.booked);
-
-  // ── Summary stats ──
-  const chColor = ch => HS_CHANNEL_COLORS[ch] || 'var(--text3)';
-
-  const summaryHTML = `
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:24px;">
-      ${[
-        ['Total Leads',   data.total.toLocaleString(),         '#4f8ef7'],
-        ['Booked Today',  booked.length.toString(),            '#3ecf8e'],
-        ['Total Booked',  data.booked_total.toLocaleString(),  '#3ecf8e'],
-        ['Meta Leads',    data.channel_breakdown.find(c=>c.channel==='Meta')?.count.toLocaleString()||'—',   '#1877f2'],
-        ['Google Leads',  data.channel_breakdown.find(c=>c.channel==='Google')?.count.toLocaleString()||'—', '#34a853'],
-      ].map(([label,val,color]) => `
-        <div class="stat-card" style="padding:14px;">
-          <div class="stat-card-accent" style="background:${color}"></div>
-          <div class="stat-card-label">${label}</div>
-          <div class="stat-card-value" style="font-size:22px">${val}</div>
-        </div>`).join('')}
-    </div>`;
-
-  // ── Channel filter pills ──
-  const filterHTML = `
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center;">
-      <span style="font-size:11.5px;color:var(--text3);margin-right:4px;">Filter by channel:</span>
-      <span class="chart-tag active-filter" onclick="filterLeads(this,'')" data-filter="">
-        All <span style="margin-left:4px;opacity:0.6">${data.total.toLocaleString()}</span>
-      </span>
-      ${data.channel_breakdown.map(ch => `
-        <span class="chart-tag" onclick="filterLeads(this,'${ch.channel}')" data-filter="${ch.channel}"
-          style="border-left:2px solid ${HS_CHANNEL_COLORS[ch.channel]||'var(--border)'}">
-          ${ch.channel} <span style="margin-left:4px;opacity:0.6">${ch.count.toLocaleString()}</span>
-        </span>`).join('')}
-    </div>`;
-
-  // ── Leads table builder ──
-  function leadsTable(rows, title, badge, badgeStyle) {
-    return `
-      <div class="campaign-table-wrap" style="margin-bottom:24px;">
-        <div class="table-card-header" style="padding:16px 20px;">
-          <div class="chart-card-title">${title}</div>
-          <div style="display:flex;gap:8px;align-items:center;">
-            <div class="chart-tag" style="${badgeStyle}">${badge}</div>
-            <div class="chart-tag" style="background:rgba(62,207,142,0.08);color:var(--green);border-color:rgba(62,207,142,0.2);">● Live · HubSpot</div>
-          </div>
-        </div>
-        <div class="table-scroll">
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th style="text-align:left">Brand</th>
-                <th style="text-align:left">Location</th>
-                <th style="text-align:left">Channel</th>
-                <th>Date</th>
-                <th style="text-align:left">View</th>
-              </tr>
-            </thead>
-            <tbody class="leads-tbody">
-              ${rows.map(d => `
-                <tr data-channel="${d.channel}">
-                  <td><strong>${d.name}</strong></td>
-                  <td style="text-align:left;font-family:'Geist',sans-serif;font-size:12.5px;color:var(--text)">${d.brand}</td>
-                  <td style="text-align:left;font-family:'Geist',sans-serif;font-size:12px;color:var(--text2)">${d.location}</td>
-                  <td style="text-align:left">
-                    <span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-family:'Geist',sans-serif;color:${chColor(d.channel)}">
-                      <span style="width:6px;height:6px;border-radius:50%;background:${chColor(d.channel)};flex-shrink:0"></span>
-                      ${d.channel}
-                    </span>
-                  </td>
-                  <td style="font-size:11.5px">${d.created}</td>
-                  <td style="text-align:left">
-                    <a href="https://app.hubspot.com/contacts/243076641/record/0-3/${d.id}"
-                       target="_blank"
-                       style="font-size:11px;color:var(--accent);text-decoration:none;font-family:'Geist',sans-serif;">
-                      Open ↗
-                    </a>
-                  </td>
-                </tr>`).join('')}
-            </tbody>
-          </table>
+  if (!reports || reports.length === 0) {
+    root.innerHTML = `
+      <div class="info-box blue" style="margin-bottom:0">
+        <div class="info-box-icon">📊</div>
+        <div>
+          No HubSpot reports have been linked for <strong>${practice}</strong> yet.
+          Create a report in HubSpot, then share the URL with AMP Agency to add it here.
         </div>
       </div>`;
+    return;
   }
 
-  // ── Booked section ──
-  const bookedHTML = `
-    <div style="margin-bottom:8px;">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-        <div style="width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 2s infinite;"></div>
-        <span style="font-size:15px;font-weight:600;color:var(--text);">Booked</span>
-        <span style="font-size:12px;color:var(--text3);">${data.booked_total.toLocaleString()} total · showing today's</span>
-      </div>
-      ${leadsTable(booked, 'Booked Appointments', `${booked.length} today`, 'background:rgba(62,207,142,0.1);color:var(--green);border-color:rgba(62,207,142,0.2);')}
-    </div>`;
-
-  // ── All leads section ──
-  const allLeadsHTML = `
-    <div>
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-        <span style="font-size:15px;font-weight:600;color:var(--text);">All Leads</span>
-        <span style="font-size:12px;color:var(--text3);">${data.total.toLocaleString()} total · showing most recent</span>
-      </div>
-      ${filterHTML}
-      ${leadsTable(leads, 'Recent Leads', `${leads.length} shown`, 'background:rgba(79,142,247,0.1);color:var(--accent);border-color:rgba(79,142,247,0.2);')}
-    </div>`;
-
-  root.innerHTML = summaryHTML + bookedHTML + allLeadsHTML;
+  root.innerHTML = `
+    <div class="info-box blue" style="margin-bottom:24px;">
+      <div class="info-box-icon">ℹ️</div>
+      <div>These reports are pulled live from HubSpot. You must be logged into HubSpot in this browser for the embeds to display. <a href="https://app.hubspot.com" target="_blank" style="color:var(--accent)">Log in to HubSpot ↗</a></div>
+    </div>
+    ${reports.map((r, i) => `
+      <div class="chart-card" style="padding:0;overflow:hidden;margin-bottom:20px;">
+        <div class="table-card-header" style="padding:16px 20px;border-bottom:1px solid var(--border);border-radius:0;">
+          <div class="chart-card-title">${r.title}</div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <div class="chart-tag" style="background:rgba(62,207,142,0.08);color:var(--green);border-color:rgba(62,207,142,0.2);">● Live · HubSpot</div>
+            <a href="${r.url}" target="_blank" style="font-size:11.5px;color:var(--accent);text-decoration:none;font-family:'Geist',sans-serif;padding:4px 10px;border:1px solid var(--border2);border-radius:6px;">Open in HubSpot ↗</a>
+          </div>
+        </div>
+        <iframe
+          src="${r.url}"
+          style="width:100%;height:700px;border:none;display:block;background:var(--surface2);"
+          loading="lazy"
+          title="${r.title}"
+        ></iframe>
+      </div>`).join('')}`;
 }
 
-function filterLeads(el, channel) {
-  document.querySelectorAll('#leads-root .chart-tag').forEach(t => t.classList.remove('active-filter'));
-  el.classList.add('active-filter');
-  document.querySelectorAll('#leads-root .leads-tbody tr').forEach(row => {
-    row.style.display = (!channel || row.dataset.channel === channel) ? '' : 'none';
-  });
-}
+// ═══════════════════════════════════════════════
+// SKELETON LOADER
 
 // ═══════════════════════════════════════════════
 // SKELETON LOADER
